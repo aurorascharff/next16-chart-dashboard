@@ -22,14 +22,6 @@ import type { FilterValues } from '@/types/filters';
 import { Select } from './design/Select';
 import type { Route } from 'next';
 
-const EMPTY_FILTERS: FilterValues = {
-  category: null,
-  city: null,
-  country: null,
-  region: null,
-  subcategory: null,
-};
-
 export function FilterPanel() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -166,7 +158,13 @@ export function FilterPanel() {
             <Button
               variant="outline"
               onClick={() => {
-                return applyFiltersAction(EMPTY_FILTERS);
+                return applyFiltersAction({
+                  category: null,
+                  city: null,
+                  country: null,
+                  region: null,
+                  subcategory: null,
+                });
               }}
               className="gap-2"
             >
