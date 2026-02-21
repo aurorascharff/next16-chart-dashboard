@@ -1,7 +1,7 @@
 'use client';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { useLocalTime } from '@/hooks/useLocalTime';
+import { useLocalTime } from '@/hooks/use-local-time';
 import { useCurrentUser } from '@/providers/AuthProvider';
 
 export function UserGreeting() {

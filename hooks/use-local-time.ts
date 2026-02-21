@@ -5,12 +5,12 @@ export function useLocalTime() {
 
   useEffect(() => {
     const update = () => {
-      return setTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      setTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     };
     update();
     const interval = setInterval(update, 60_000);
     return () => {
-      return clearInterval(interval);
+      clearInterval(interval);
     };
   }, []);
 
