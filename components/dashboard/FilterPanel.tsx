@@ -135,8 +135,8 @@ export function FilterPanel() {
               <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">Location</p>
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">Region</label>
-                <Select value={region} onValueChange={handleRegionChange}>
-                  <SelectTrigger className="w-full">
+                <Select value={region} onValueChange={handleRegionChange} disabled={regionsLoading}>
+                  <SelectTrigger className="w-full" disabled={regionsLoading}>
                     <SelectValue placeholder={regionsLoading ? 'Loading...' : 'Select region'} />
                   </SelectTrigger>
                   <SelectContent>
@@ -152,8 +152,8 @@ export function FilterPanel() {
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">Country</label>
-                <Select value={country} onValueChange={handleCountryChange} disabled={!region}>
-                  <SelectTrigger className="w-full" disabled={!region}>
+                <Select value={country} onValueChange={handleCountryChange} disabled={!region || countriesLoading}>
+                  <SelectTrigger className="w-full" disabled={!region || countriesLoading}>
                     <SelectValue
                       placeholder={
                         !region ? 'Select a region first' : countriesLoading ? 'Loading...' : 'Select country'
@@ -173,8 +173,8 @@ export function FilterPanel() {
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">City</label>
-                <Select value={city} onValueChange={handleCityChange} disabled={!region}>
-                  <SelectTrigger className="w-full" disabled={!region}>
+                <Select value={city} onValueChange={handleCityChange} disabled={!region || citiesLoading}>
+                  <SelectTrigger className="w-full" disabled={!region || citiesLoading}>
                     <SelectValue
                       placeholder={!region ? 'Select a region first' : citiesLoading ? 'Loading...' : 'Select city'}
                     />
@@ -196,8 +196,8 @@ export function FilterPanel() {
               <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">Product</p>
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">Category</label>
-                <Select value={category} onValueChange={handleCategoryChange}>
-                  <SelectTrigger className="w-full">
+                <Select value={category} onValueChange={handleCategoryChange} disabled={categoriesLoading}>
+                  <SelectTrigger className="w-full" disabled={categoriesLoading}>
                     <SelectValue placeholder={categoriesLoading ? 'Loading...' : 'Select category'} />
                   </SelectTrigger>
                   <SelectContent>
@@ -213,8 +213,12 @@ export function FilterPanel() {
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">Subcategory</label>
-                <Select value={subcategory} onValueChange={handleSubcategoryChange} disabled={!category}>
-                  <SelectTrigger className="w-full" disabled={!category}>
+                <Select
+                  value={subcategory}
+                  onValueChange={handleSubcategoryChange}
+                  disabled={!category || subcategoriesLoading}
+                >
+                  <SelectTrigger className="w-full" disabled={!category || subcategoriesLoading}>
                     <SelectValue
                       placeholder={
                         !category
