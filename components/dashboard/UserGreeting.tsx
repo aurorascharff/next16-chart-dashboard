@@ -10,9 +10,9 @@ export function UserGreeting() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold tracking-tight">{user.branch} Dashboard</h1>
+      <h1 className="text-3xl font-bold tracking-tight">{user?.branch} Dashboard</h1>
       <p className="text-muted-foreground">
-        Welcome, {user.name} — {user.role}
+        Welcome, {user?.name} — {user?.role}
         {time && <span className="ml-2">· {time}</span>}
       </p>
     </div>
