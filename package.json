@@ -45,6 +45,7 @@
     "@tailwindcss/postcss": "4",
     "@types/node": "^25",
     "@types/react": "^19",
+    "@types/pg": "^8.16.0",
     "@types/react-dom": "^19",
     "@typescript-eslint/parser": "^8.50.0",
     "babel-plugin-react-compiler": "^19.0.0-beta-e993439-20250328",
