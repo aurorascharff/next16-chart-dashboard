@@ -103,7 +103,7 @@ async function getSummaryDataCached(filters: SalesFilters) {
   };
 }
 
-export const getCategories = cache(async function getCategories() {
+export const getCategories = cache(async (category?: string) => {
   'use cache: remote';
   cacheLife('hours');
 
@@ -116,7 +116,7 @@ export const getCategories = cache(async function getCategories() {
   });
 });
 
-export const getSubcategories = cache(async function getSubcategories(category: string) {
+export const getSubcategories = cache(async (category: string) => {
   'use cache: remote';
   cacheLife('hours');
 
@@ -136,7 +136,7 @@ export const getSubcategories = cache(async function getSubcategories(category: 
     });
 });
 
-export const getRegions = cache(async function getRegions() {
+export const getRegions = cache(async () => {
   'use cache: remote';
   cacheLife('hours');
 
@@ -149,7 +149,7 @@ export const getRegions = cache(async function getRegions() {
   });
 });
 
-export const getCountries = cache(async function getCountries(region: string) {
+export const getCountries = cache(async (region: string) => {
   'use cache: remote';
   cacheLife('hours');
 
@@ -169,7 +169,7 @@ export const getCountries = cache(async function getCountries(region: string) {
     });
 });
 
-export const getCities = cache(async function getCities(region: string, country?: string | null) {
+export const getCities = cache(async (region: string, country?: string | null) => {
   'use cache: remote';
   cacheLife('hours');
 
