@@ -6,12 +6,6 @@ import { SummaryCards, SummaryCardsSkeleton } from '@/components/dashboard/Summa
 import { UnitsAreaChart, UnitsChartSkeleton } from '@/components/dashboard/UnitsAreaChart';
 import { getCategoryData, getMonthlyData, getSummaryData } from '@/data/queries/sales';
 import { filterCache } from '@/lib/searchParams';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  description: 'Analyze sales data across regions, countries, and cities',
-  title: 'Sales Dashboard',
-};
 
 export default function Page({ searchParams }: PageProps<'/'>) {
   return (
@@ -50,25 +44,25 @@ type WrapperProps = {
 };
 
 async function SummaryCardsWrapper({ searchParams }: WrapperProps) {
-  const { city, country, region } = await filterCache.parse(searchParams);
-  const dataPromise = getSummaryData({ city, country, region });
+  const { category, city, country, region, subcategory } = await filterCache.parse(searchParams);
+  const dataPromise = getSummaryData({ category, city, country, region, subcategory });
   return <SummaryCards dataPromise={dataPromise} />;
 }
 
 async function RevenueChartWrapper({ searchParams }: WrapperProps) {
-  const { city, country, region } = await filterCache.parse(searchParams);
-  const dataPromise = getMonthlyData({ city, country, region });
+  const { category, city, country, region, subcategory } = await filterCache.parse(searchParams);
+  const dataPromise = getMonthlyData({ category, city, country, region, subcategory });
   return <RevenueBarChart dataPromise={dataPromise} />;
 }
 
 async function UnitsChartWrapper({ searchParams }: WrapperProps) {
-  const { city, country, region } = await filterCache.parse(searchParams);
-  const dataPromise = getMonthlyData({ city, country, region });
+  const { category, city, country, region, subcategory } = await filterCache.parse(searchParams);
+  const dataPromise = getMonthlyData({ category, city, country, region, subcategory });
   return <UnitsAreaChart dataPromise={dataPromise} />;
 }
 
 async function CategoryChartWrapper({ searchParams }: WrapperProps) {
-  const { city, country, region } = await filterCache.parse(searchParams);
-  const dataPromise = getCategoryData({ city, country, region });
+  const { category, city, country, region, subcategory } = await filterCache.parse(searchParams);
+  const dataPromise = getCategoryData({ category, city, country, region, subcategory });
   return <CategoryPieChart dataPromise={dataPromise} />;
 }

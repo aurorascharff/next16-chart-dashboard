@@ -34,7 +34,28 @@ const REGIONS_DATA = [
   },
 ];
 
-const CATEGORIES = ['Electronics', 'Clothing', 'Food', 'Home & Garden', 'Sports'];
+const CATEGORIES = [
+  {
+    name: 'Electronics',
+    subcategories: ['Smartphones', 'Laptops', 'Tablets', 'Audio'],
+  },
+  {
+    name: 'Clothing',
+    subcategories: ["Men's", "Women's", 'Kids', 'Accessories'],
+  },
+  {
+    name: 'Food',
+    subcategories: ['Fresh', 'Packaged', 'Beverages', 'Snacks'],
+  },
+  {
+    name: 'Home & Garden',
+    subcategories: ['Furniture', 'Decor', 'Garden', 'Kitchen'],
+  },
+  {
+    name: 'Sports',
+    subcategories: ['Equipment', 'Apparel', 'Footwear', 'Outdoors'],
+  },
+];
 const MONTHS = [
   '2025-01',
   '2025-02',
@@ -66,6 +87,23 @@ async function main() {
   await prisma.city.deleteMany();
   await prisma.country.deleteMany();
   await prisma.region.deleteMany();
+  await prisma.subcategory.deleteMany();
+  await prisma.category.deleteMany();
+
+  // Create categories and subcategories
+  const subcategoryIds: string[] = [];
+  for (const catData of CATEGORIES) {
+    const category = await prisma.category.create({
+      data: { name: catData.name },
+    });
+
+    for (const subName of catData.subcategories) {
+      const sub = await prisma.subcategory.create({
+        data: { categoryId: category.id, name: subName },
+      });
+      subcategoryIds.push(sub.id);
+    }
+  }
 
   for (const regionData of REGIONS_DATA) {
     const region = await prisma.region.create({
@@ -82,15 +120,15 @@ async function main() {
           data: { countryId: country.id, name: cityName },
         });
 
-        // Generate sales data for each city × category × month
+        // Generate sales data for each city × subcategory × month
         const salesRecords = [];
         for (const month of MONTHS) {
-          for (const category of CATEGORIES) {
+          for (const subcategoryId of subcategoryIds) {
             salesRecords.push({
-              category,
               cityId: city.id,
               month,
               revenue: randomRevenue(5000),
+              subcategoryId,
               units: randomUnits(50),
             });
           }

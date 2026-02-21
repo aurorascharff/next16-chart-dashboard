@@ -36,12 +36,29 @@ model City {
     @@unique([name, countryId])
 }
 
+model Category {
+    id            String        @id @default(cuid())
+    name          String        @unique
+    subcategories Subcategory[]
+}
+
+model Subcategory {
+    id         String      @id @default(cuid())
+    name       String
+    categoryId String
+    category   Category    @relation(fields: [categoryId], references: [id])
+    sales      SalesData[]
+
+    @@unique([name, categoryId])
+}
+
 model SalesData {
-    id       String @id @default(cuid())
-    cityId   String
-    city     City   @relation(fields: [cityId], references: [id])
-    month    String // e.g. "2025-01", "2025-02"
-    category String // e.g. "Electronics", "Clothing", "Food"
-    revenue  Float
-    units    Int
+    id            String      @id @default(cuid())
+    cityId        String
+    city          City        @relation(fields: [cityId], references: [id])
+    subcategoryId String
+    subcategory   Subcategory @relation(fields: [subcategoryId], references: [id])
+    month         String
+    revenue       Float
+    units         Int
 }

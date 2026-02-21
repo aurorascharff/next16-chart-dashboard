@@ -18,11 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  description: 'Analyze sales data across regions, countries, and cities',
-  title: {
-    default: 'Sales Dashboard',
-    template: '%s | Sales Dashboard',
-  },
+  description: 'A Next.js 16 sales analytics dashboard with cascading filters, Prisma, Tailwind CSS, and shadcn/ui',
+  title: 'Next 16 Charts',
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {

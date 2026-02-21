@@ -1,28 +1,22 @@
 import 'server-only';
 
+import { cacheLife } from 'next/cache';
 import { cache } from 'react';
 import { prisma } from '@/db';
 import { slow } from '@/utils/slow';
 
 type SalesFilters = {
+  category?: string | null;
   city?: string | null;
   country?: string | null;
   region?: string | null;
+  subcategory?: string | null;
 };
 
-function buildWhere(filters: SalesFilters): Record<string, unknown> {
-  const where: Record<string, unknown> = {};
-  if (filters.city) {
-    where.city = { name: filters.city };
-  } else if (filters.country) {
-    where.city = { country: { name: filters.country } };
-  } else if (filters.region) {
-    where.city = { country: { region: { name: filters.region } } };
-  }
-  return where;
-}
-
 export const getMonthlyData = cache(async (filters: SalesFilters) => {
+  'use cache';
+  cacheLife('hours');
+
   await slow(2000);
 
   const sales = await prisma.salesData.findMany({
@@ -48,16 +42,21 @@ export const getMonthlyData = cache(async (filters: SalesFilters) => {
 });
 
 export const getCategoryData = cache(async (filters: SalesFilters) => {
+  'use cache';
+  cacheLife('hours');
+
   await slow();
 
   const sales = await prisma.salesData.findMany({
+    include: { subcategory: { include: { category: true } } },
     where: buildWhere(filters),
   });
 
   const revenueByCategory = new Map<string, number>();
 
   for (const sale of sales) {
-    revenueByCategory.set(sale.category, (revenueByCategory.get(sale.category) ?? 0) + sale.revenue);
+    const categoryName = sale.subcategory.category.name;
+    revenueByCategory.set(categoryName, (revenueByCategory.get(categoryName) ?? 0) + sale.revenue);
   }
 
   return Array.from(revenueByCategory.entries()).map(([category, revenue]) => {
@@ -69,6 +68,9 @@ export const getCategoryData = cache(async (filters: SalesFilters) => {
 });
 
 export const getSummaryData = cache(async (filters: SalesFilters) => {
+  'use cache';
+  cacheLife('hours');
+
   await slow();
 
   const sales = await prisma.salesData.findMany({
@@ -87,3 +89,25 @@ export const getSummaryData = cache(async (filters: SalesFilters) => {
     totalUnits,
   };
 });
+
+function buildWhere(filters: SalesFilters): Record<string, unknown> {
+  const where: Record<string, unknown> = {};
+
+  // Location filters (cascading)
+  if (filters.city) {
+    where.city = { name: filters.city };
+  } else if (filters.country) {
+    where.city = { country: { name: filters.country } };
+  } else if (filters.region) {
+    where.city = { country: { region: { name: filters.region } } };
+  }
+
+  // Category filters (cascading)
+  if (filters.subcategory) {
+    where.subcategory = { name: filters.subcategory };
+  } else if (filters.category) {
+    where.subcategory = { category: { name: filters.category } };
+  }
+
+  return where;
+}

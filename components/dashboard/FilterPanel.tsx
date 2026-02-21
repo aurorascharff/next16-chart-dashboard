@@ -39,12 +39,32 @@ export function FilterPanel() {
     startTransition,
   });
   const [city, setCity] = useQueryState('city', { ...filterSearchParams.city, shallow: false, startTransition });
+  const [category, setCategory] = useQueryState('category', {
+    ...filterSearchParams.category,
+    shallow: false,
+    startTransition,
+  });
+  const [subcategory, setSubcategory] = useQueryState('subcategory', {
+    ...filterSearchParams.subcategory,
+    shallow: false,
+    startTransition,
+  });
 
+  // Regions and categories fetch at start in parallel
   const { data: regions, isLoading: regionsLoading } = useSWR<{ name: string }[]>('/api/regions', fetcher);
+  const { data: categories, isLoading: categoriesLoading } = useSWR<{ name: string }[]>('/api/categories', fetcher);
+
+  // Countries depend on region, subcategories depend on category
   const { data: countries, isLoading: countriesLoading } = useSWR<{ name: string }[]>(
     region ? `/api/countries?region=${encodeURIComponent(region)}` : null,
     fetcher,
   );
+  const { data: subcategories, isLoading: subcategoriesLoading } = useSWR<{ name: string }[]>(
+    category ? `/api/subcategories?category=${encodeURIComponent(category)}` : null,
+    fetcher,
+  );
+
+  // Cities depend on country
   const { data: cities, isLoading: citiesLoading } = useSWR<{ name: string }[]>(
     country ? `/api/cities?country=${encodeURIComponent(country)}` : null,
     fetcher,
@@ -65,13 +85,24 @@ export function FilterPanel() {
     setCity(value);
   };
 
+  const handleCategoryChange = (value: string | null) => {
+    setCategory(value);
+    setSubcategory(null);
+  };
+
+  const handleSubcategoryChange = (value: string | null) => {
+    setSubcategory(value);
+  };
+
   const handleClear = () => {
     setRegion(null);
     setCountry(null);
     setCity(null);
+    setCategory(null);
+    setSubcategory(null);
   };
 
-  const activeCount = [region, country, city].filter(Boolean).length;
+  const activeCount = [region, country, city, category, subcategory].filter(Boolean).length;
 
   return (
     <div data-pending={isPending ? '' : undefined}>
@@ -93,7 +124,7 @@ export function FilterPanel() {
           <SheetHeader>
             <SheetTitle>Filter Sales Data</SheetTitle>
             <SheetDescription>
-              Select a region, then country, then city. Each selection narrows the next.
+              Filter by location and product category. Each selection narrows the next.
             </SheetDescription>
           </SheetHeader>
 
@@ -149,6 +180,46 @@ export function FilterPanel() {
                     return (
                       <SelectItem key={c.name} value={c.name}>
                         {c.name}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
+            <Separator />
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">Category</label>
+              <Select value={category} onValueChange={handleCategoryChange}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={categoriesLoading ? 'Loading...' : 'Select category'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories?.map(c => {
+                    return (
+                      <SelectItem key={c.name} value={c.name}>
+                        {c.name}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
+            <Separator />
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">Subcategory</label>
+              <Select value={subcategory} onValueChange={handleSubcategoryChange} disabled={!category}>
+                <SelectTrigger className="w-full" disabled={!category}>
+                  <SelectValue
+                    placeholder={
+                      !category ? 'Select a category first' : subcategoriesLoading ? 'Loading...' : 'Select subcategory'
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {subcategories?.map(s => {
+                    return (
+                      <SelectItem key={s.name} value={s.name}>
+                        {s.name}
                       </SelectItem>
                     );
                   })}
