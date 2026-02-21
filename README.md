@@ -1,8 +1,8 @@
 # next16-chart-dashboard
 
-A [Next.js 16](https://nextjs.org/) sales analytics dashboard with cascading filters (Region → Country → City), built with [Prisma](https://www.prisma.io/), [Tailwind CSS](https://tailwindcss.com/), and [shadcn/ui](https://ui.shadcn.com/) (built on [Base UI](https://base-ui.com/)).
+A sales dashboard exploring **dynamic data patterns with Next.js 16's Cache Components**. Features cascading filters (Region → Country + City in parallel, Category → Subcategory), streaming charts, and URL state with pending UI, Suspense boundaries, and parallel data fetching.
 
-Demonstrates modern patterns: static shell with async wrappers, `use()` for streaming data to client components, [nuqs](https://nuqs.47ng.com/) for URL state, `useTransition` for pending UI, and Partial Pre-Rendering via [`cacheComponents`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents).
+Built with Next.js 16, React 19, Prisma, TailwindCSS v4, and shadcn/ui (Base UI).
 
 ## Getting Started
 
@@ -54,12 +54,12 @@ Every page folder should contain everything it needs. Components and functions l
 
 ## Development Flow
 
-This project uses [`cacheComponents: true`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents) — data fetching is **dynamic by default**. Push dynamic data access (`searchParams`, `cookies()`, `headers()`, uncached fetches) as deep as possible in the component tree to maximize static content. Async components accessing dynamic data must be wrapped in `<Suspense>` with skeleton fallbacks.
+This project uses [Cache Components](https://nextjs.org/docs/app/getting-started/cache-components) ([`cacheComponents: true`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents)) — data fetching is **dynamic by default**, and routes are prerendered into a static HTML shell with dynamic content streaming in via `<Suspense>`. Push dynamic data access (`searchParams`, `cookies()`, `headers()`, uncached fetches) as deep as possible in the component tree to maximize the static shell.
 
 - **Fetching data** — Create queries in `data/queries/`, call in Server Components. Wrap with `cache()` for deduplication.
 - **Mutating data** — Create Server Actions in `data/actions/` with `"use server"`. Invalidate with `updateTag()` or `revalidateTag()`. Use `useTransition` or `useFormStatus` for pending states, `useOptimistic` for instant feedback.
 - **Navigation** — Wrap state changes in `useTransition` to keep old content visible while loading.
-- **Caching** — Add [`"use cache"`](https://nextjs.org/docs/app/api-reference/directives/use-cache) to pages, components, or functions you want to pre-render or cache.
+- **Caching** — Add [`"use cache"`](https://nextjs.org/docs/app/api-reference/directives/use-cache) with [`cacheLife()`](https://nextjs.org/docs/app/api-reference/functions/cacheLife) to pages, components, or functions you want included in the static shell or cached across requests.
 
 ## Development Tools
 
