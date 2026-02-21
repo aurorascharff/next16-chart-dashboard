@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function Page({ searchParams }: PageProps<'/'>) {
   return (
-    <div className="mx-auto flex max-w-7xl flex-col gap-6 p-6 has-data-pending:animate-pulse md:p-10">
+    <div className="group mx-auto flex max-w-7xl flex-col gap-6 p-6 md:p-10">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Sales Dashboard</h1>
@@ -25,20 +25,22 @@ export default function Page({ searchParams }: PageProps<'/'>) {
           <FilterPanel />
         </Suspense>
       </div>
-      <Suspense fallback={<SummaryCardsSkeleton />}>
-        <SummaryCardsWrapper searchParams={searchParams} />
-      </Suspense>
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Suspense fallback={<RevenueChartSkeleton />}>
-          <RevenueChartWrapper searchParams={searchParams} />
+      <div className="flex flex-col gap-6 group-has-data-pending:animate-pulse">
+        <Suspense fallback={<SummaryCardsSkeleton />}>
+          <SummaryCardsWrapper searchParams={searchParams} />
         </Suspense>
-        <Suspense fallback={<UnitsChartSkeleton />}>
-          <UnitsChartWrapper searchParams={searchParams} />
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Suspense fallback={<RevenueChartSkeleton />}>
+            <RevenueChartWrapper searchParams={searchParams} />
+          </Suspense>
+          <Suspense fallback={<UnitsChartSkeleton />}>
+            <UnitsChartWrapper searchParams={searchParams} />
+          </Suspense>
+        </div>
+        <Suspense fallback={<CategoryChartSkeleton />}>
+          <CategoryChartWrapper searchParams={searchParams} />
         </Suspense>
       </div>
-      <Suspense fallback={<CategoryChartSkeleton />}>
-        <CategoryChartWrapper searchParams={searchParams} />
-      </Suspense>
     </div>
   );
 }

@@ -111,7 +111,7 @@ On the server side, use `createSearchParamsCache` to parse the `searchParams` pr
 
 ## Pending UI with `data-pending`
 
-When a component triggers a server re-render (e.g. changing filters via nuqs), use `useTransition` to get `isPending`. Set `data-pending={isPending ? '' : undefined}` on a root element of that component. Then any ancestor can target the pending state with Tailwind's `has-[data-pending]` variant (e.g. `has-data-pending:animate-pulse`) to show a visual loading indicator without the pending component needing to know about it.
+When a component triggers a server re-render (e.g. changing filters via nuqs), use `useTransition` to get `isPending`. Set `data-pending={isPending ? '' : undefined}` on a root element of that component. Ancestors or siblings can target this with Tailwind variants like `has-data-pending:animate-pulse` or `group-has-data-pending:animate-pulse`.
 
 ## Server Components (Default)
 
