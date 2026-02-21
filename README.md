@@ -1,4 +1,4 @@
-# next16-filters
+# next16-chart-dashboard
 
 A [Next.js 16](https://nextjs.org/) sales analytics dashboard with cascading filters (Region → Country → City), built with [Prisma](https://www.prisma.io/), [Tailwind CSS](https://tailwindcss.com/), and [shadcn/ui](https://ui.shadcn.com/) (built on [Base UI](https://base-ui.com/)).
 
