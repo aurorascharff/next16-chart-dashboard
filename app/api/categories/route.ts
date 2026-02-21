@@ -1,14 +1,6 @@
 import { NextResponse } from 'next/server';
-import { CATEGORIES } from '@/data/mock/sales-data';
-import { slow } from '@/utils/slow';
+import { getCategories } from '@/data/queries/sales';
 
 export async function GET() {
-  await slow();
-
-  const categories = CATEGORIES.map(c => {
-    return { name: c.name };
-  }).sort((a, b) => {
-    return a.name.localeCompare(b.name);
-  });
-  return NextResponse.json(categories);
+  return NextResponse.json(await getCategories());
 }

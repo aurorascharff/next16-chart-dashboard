@@ -1,14 +1,6 @@
 import { NextResponse } from 'next/server';
-import { REGIONS_DATA } from '@/data/mock/sales-data';
-import { slow } from '@/utils/slow';
+import { getRegions } from '@/data/queries/sales';
 
 export async function GET() {
-  await slow();
-
-  const regions = REGIONS_DATA.map(r => {
-    return { name: r.name };
-  }).sort((a, b) => {
-    return a.name.localeCompare(b.name);
-  });
-  return NextResponse.json(regions);
+  return NextResponse.json(await getRegions());
 }

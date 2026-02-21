@@ -3,6 +3,7 @@ import 'server-only';
 import { cacheLife } from 'next/cache';
 import { cache } from 'react';
 import { MOCK_SALES, type MockSaleRecord } from '@/data/mock/sales-data';
+import { CATEGORIES, REGIONS_DATA } from '@/data/mock/sales-data';
 import { checkAuth } from '@/data/queries/user';
 import { slow } from '@/utils/slow';
 
@@ -100,4 +101,83 @@ async function getSummaryDataCached(filters: SalesFilters) {
       return sum + s.units;
     }, 0),
   };
+}
+
+export async function getCategories() {
+  await slow();
+
+  return CATEGORIES.map(c => {
+    return { name: c.name };
+  }).sort((a, b) => {
+    return a.name.localeCompare(b.name);
+  });
+}
+
+export async function getSubcategories(category: string) {
+  await slow();
+
+  const categoryData = CATEGORIES.find(c => {
+    return c.name === category;
+  });
+  if (!categoryData) return [];
+
+  return categoryData.subcategories
+    .map(name => {
+      return { name };
+    })
+    .sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
+}
+
+export async function getRegions() {
+  await slow();
+
+  return REGIONS_DATA.map(r => {
+    return { name: r.name };
+  }).sort((a, b) => {
+    return a.name.localeCompare(b.name);
+  });
+}
+
+export async function getCountries(region: string) {
+  await slow();
+
+  const regionData = REGIONS_DATA.find(r => {
+    return r.name === region;
+  });
+  if (!regionData) return [];
+
+  return regionData.countries
+    .map(c => {
+      return { name: c.name };
+    })
+    .sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
+}
+
+export async function getCities(region: string, country?: string | null) {
+  await slow();
+
+  const regionData = REGIONS_DATA.find(r => {
+    return r.name === region;
+  });
+  if (!regionData) return [];
+
+  const countries = country
+    ? regionData.countries.filter(c => {
+        return c.name === country;
+      })
+    : regionData.countries;
+
+  return countries
+    .flatMap(c => {
+      return c.cities.map(name => {
+        return { name };
+      });
+    })
+    .sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
 }
