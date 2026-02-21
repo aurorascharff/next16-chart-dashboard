@@ -25,11 +25,11 @@ data/
   actions/                # Server Actions
   queries/                # Data fetching with cache()
 lib/
-  searchParams.ts         # nuqs parsers and cache
+  fetcher.ts              # Shared SWR fetcher
 ```
 
 - **components/ui** — [shadcn/ui](https://ui.shadcn.com/) components. Add with `bunx shadcn@latest add <component-name>`
-- **components/design** — Components that expose [Action props](https://react.dev/reference/react/useTransition#exposing-action-props-from-components) and handle async coordination internally
+- **components/design** — Components that expose [Action props](https://react.dev/reference/react/useTransition#exposing-action-props-from-components) and handle optimistic state and loading internally via `useOptimistic` + `useTransition`
 
 Every page folder should contain everything it needs. Components and functions live at the nearest shared space in the hierarchy.
 
@@ -39,7 +39,7 @@ Every page folder should contain everything it needs. Components and functions l
 
 This project uses [Cache Components](https://nextjs.org/docs/app/getting-started/cache-components) ([`cacheComponents: true`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents)) — data fetching is **dynamic by default**, and routes are prerendered into a static HTML shell with dynamic content streaming in via `<Suspense>`. Push dynamic data access (`searchParams`, `cookies()`, `headers()`, uncached fetches) as deep as possible in the component tree to maximize the static shell.
 
-- **Fetching data** — Create queries in `data/queries/`, call in Server Components. Wrap with `cache()` for deduplication.
+- **Fetching data** — Create queries in `data/queries/`, call in Server Components. Wrap with `cache()` for deduplication. Client components use SWR for dependent or interactive fetches.
 - **Mutating data** — Create Server Actions in `data/actions/` with `"use server"`. Invalidate with `updateTag()` or `revalidateTag()`. Use `useTransition` or `useFormStatus` for pending states, `useOptimistic` for instant feedback.
 - **Navigation** — Wrap state changes in `useTransition` to keep old content visible while loading.
 - **Caching** — Add [`"use cache"`](https://nextjs.org/docs/app/api-reference/directives/use-cache) with [`cacheLife()`](https://nextjs.org/docs/app/api-reference/functions/cacheLife) to pages, components, or functions you want included in the static shell or cached across requests.

@@ -28,7 +28,6 @@ Always run `npm run build` and `npm run lint` before committing. Fix any errors 
 - Tailwind CSS 4.x
 - shadcn/ui components (`components/ui/`)
 - Base UI (`@base-ui/react`) for custom interactive components
-- nuqs for URL search param state
 - SWR for client-side data fetching
 - Zod for validation
 - Sonner for toasts
@@ -101,15 +100,9 @@ This keeps the page itself fully static/cacheable while dynamic data is fetched 
 
 Export skeleton components from the **same file** as the component they are a fallback for. Place the skeleton function **below** the main component.
 
-## URL State with nuqs
-
-Use nuqs (`useQueryState` + `createSearchParamsCache`) for URL search param state. Define parsers in `lib/searchParams.ts`. Always set `shallow: false` and pass `startTransition` from `useTransition()` as options on `useQueryState`. This ensures filter changes trigger server re-renders with proper pending state.
-
-On the server side, use `createSearchParamsCache` to parse the `searchParams` promise.
-
 ## Pending UI with `data-pending`
 
-When a component triggers a server re-render (e.g. changing filters via nuqs), use `useTransition` to get `isPending`. Set `data-pending={isPending ? '' : undefined}` on a root element of that component. Ancestors or siblings can target this with Tailwind variants like `has-data-pending:animate-pulse` or `group-has-data-pending:animate-pulse`.
+When a component triggers a server re-render (e.g. changing filters), use `useTransition` to get `isPending`. Set `data-pending={isPending ? '' : undefined}` on a root element of that component. Ancestors or siblings can target this with Tailwind variants like `has-data-pending:animate-pulse` or `group-has-data-pending:animate-pulse`.
 
 ## Server Components (Default)
 
@@ -145,6 +138,5 @@ Add `'use client'` only when needed for:
 ## Important Files
 
 - `lib/utils.ts` — Utility functions including `cn()`
-- `lib/searchParams.ts` — nuqs search param parsers and cache
 - `next.config.ts` — `typedRoutes`, `cacheComponents`, `reactCompiler`
 - `components.json` — shadcn/ui configuration

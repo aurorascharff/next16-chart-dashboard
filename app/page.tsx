@@ -6,7 +6,7 @@ import { CategoryPieChart, CategoryChartSkeleton } from '@/components/charts/Cat
 import { RevenueBarChart, RevenueChartSkeleton } from '@/components/charts/RevenueBarChart';
 import { UnitsAreaChart, UnitsChartSkeleton } from '@/components/charts/UnitsAreaChart';
 import { getCategoryData, getMonthlyData } from '@/data/queries/sales';
-import { filterCache } from '@/lib/searchParams';
+import type { FilterValues } from '@/types/filters';
 
 export default function Page({ searchParams }: PageProps<'/'>) {
   return (
@@ -47,19 +47,19 @@ type WrapperProps = {
 };
 
 async function RevenueChartWrapper({ searchParams }: WrapperProps) {
-  const { category, city, country, region, subcategory } = await filterCache.parse(searchParams);
+  const { category, city, country, region, subcategory } = (await searchParams) as FilterValues;
   const dataPromise = getMonthlyData({ category, city, country, region, subcategory });
   return <RevenueBarChart dataPromise={dataPromise} />;
 }
 
 async function UnitsChartWrapper({ searchParams }: WrapperProps) {
-  const { category, city, country, region, subcategory } = await filterCache.parse(searchParams);
+  const { category, city, country, region, subcategory } = (await searchParams) as FilterValues;
   const dataPromise = getMonthlyData({ category, city, country, region, subcategory });
   return <UnitsAreaChart dataPromise={dataPromise} />;
 }
 
 async function CategoryChartWrapper({ searchParams }: WrapperProps) {
-  const { category, city, country, region, subcategory } = await filterCache.parse(searchParams);
+  const { category, city, country, region, subcategory } = (await searchParams) as FilterValues;
   const dataPromise = getCategoryData({ category, city, country, region, subcategory });
   return <CategoryPieChart dataPromise={dataPromise} />;
 }

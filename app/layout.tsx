@@ -1,7 +1,6 @@
 import './globals.css';
 
 import { Geist, Geist_Mono } from 'next/font/google';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Toaster } from '@/components/ui/sonner';
@@ -28,17 +27,15 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   const userPromise = getCurrentUser();
   return (
     <html lang="en" className={geistSans.variable} suppressHydrationWarning>
-      <NuqsAdapter>
-        <body className={`${geistMono.variable} antialiased`}>
-          <ThemeProvider>
-            <AuthProvider value={userPromise}>
-              <main>{children}</main>
-            </AuthProvider>
-            <ThemeToggle />
-            <Toaster />
-          </ThemeProvider>
-        </body>
-      </NuqsAdapter>
+      <body className={`${geistMono.variable} antialiased`}>
+        <ThemeProvider>
+          <AuthProvider value={userPromise}>
+            <main>{children}</main>
+          </AuthProvider>
+          <ThemeToggle />
+          <Toaster />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
