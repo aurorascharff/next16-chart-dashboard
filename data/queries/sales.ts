@@ -23,7 +23,7 @@ async function getMonthlyDataCached(filters: SalesFilters) {
   'use cache';
   cacheLife('hours');
 
-  await slow(2000);
+  await slow(3000);
 
   const sales = await prisma.salesData.findMany({
     orderBy: { month: 'asc' },
@@ -56,7 +56,7 @@ async function getCategoryDataCached(filters: SalesFilters) {
   'use cache';
   cacheLife('hours');
 
-  await slow();
+  await slow(2000);
 
   const sales = await prisma.salesData.findMany({
     include: { subcategory: { include: { category: true } } },
@@ -87,7 +87,7 @@ async function getSummaryDataCached(filters: SalesFilters) {
   'use cache';
   cacheLife('hours');
 
-  await slow();
+  await slow(2000);
 
   const sales = await prisma.salesData.findMany({
     where: buildWhere(filters),
