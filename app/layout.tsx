@@ -1,6 +1,8 @@
 import './globals.css';
 
+import { Github } from 'lucide-react';
 import { Geist, Geist_Mono } from 'next/font/google';
+import Link from 'next/link';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Toaster } from '@/components/ui/sonner';
@@ -32,7 +34,18 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
           <AuthProvider value={userPromise}>
             <main>{children}</main>
           </AuthProvider>
-          <ThemeToggle />
+          <div className="fixed bottom-4 left-4 flex items-center gap-2">
+            <Link
+              href="https://github.com/aurorascharff/next16-chart-dashboard"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="View source on GitHub"
+            >
+              <Github className="size-5" />
+            </Link>
+            <ThemeToggle />
+          </div>
           <Toaster />
         </ThemeProvider>
       </body>
