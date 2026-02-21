@@ -2,8 +2,8 @@ import 'server-only';
 
 import { cacheLife } from 'next/cache';
 import { cache } from 'react';
+import { MOCK_SALES, type MockSaleRecord } from '@/data/mock/sales-data';
 import { checkAuth } from '@/data/queries/user';
-import { prisma } from '@/db';
 import { slow } from '@/utils/slow';
 
 type SalesFilters = {
@@ -14,6 +14,17 @@ type SalesFilters = {
   subcategory?: string | null;
 };
 
+function filterSales(filters: SalesFilters): MockSaleRecord[] {
+  return MOCK_SALES.filter(sale => {
+    if (filters.city && sale.city !== filters.city) return false;
+    if (filters.country && sale.country !== filters.country) return false;
+    if (filters.region && sale.region !== filters.region) return false;
+    if (filters.subcategory && sale.subcategory !== filters.subcategory) return false;
+    if (filters.category && sale.category !== filters.category) return false;
+    return true;
+  });
+}
+
 export const getMonthlyData = cache(async (filters: SalesFilters) => {
   await checkAuth();
   return getMonthlyDataCached(filters);
@@ -22,14 +33,9 @@ export const getMonthlyData = cache(async (filters: SalesFilters) => {
 async function getMonthlyDataCached(filters: SalesFilters) {
   'use cache: remote';
   cacheLife('hours');
-
   await slow(3000);
 
-  const sales = await prisma.salesData.findMany({
-    orderBy: { month: 'asc' },
-    where: buildWhere(filters),
-  });
-
+  const sales = filterSales(filters);
   const revenueByMonth = new Map<string, number>();
   const unitsByMonth = new Map<string, number>();
 
@@ -55,19 +61,13 @@ export const getCategoryData = cache(async (filters: SalesFilters) => {
 async function getCategoryDataCached(filters: SalesFilters) {
   'use cache: remote';
   cacheLife('hours');
-
   await slow(2000);
 
-  const sales = await prisma.salesData.findMany({
-    include: { subcategory: { include: { category: true } } },
-    where: buildWhere(filters),
-  });
-
+  const sales = filterSales(filters);
   const revenueByCategory = new Map<string, number>();
 
   for (const sale of sales) {
-    const categoryName = sale.subcategory.category.name;
-    revenueByCategory.set(categoryName, (revenueByCategory.get(categoryName) ?? 0) + sale.revenue);
+    revenueByCategory.set(sale.category, (revenueByCategory.get(sale.category) ?? 0) + sale.revenue);
   }
 
   return Array.from(revenueByCategory.entries()).map(([category, revenue]) => {
@@ -86,44 +86,18 @@ export const getSummaryData = cache(async (filters: SalesFilters) => {
 async function getSummaryDataCached(filters: SalesFilters) {
   'use cache: remote';
   cacheLife('hours');
-
   await slow(2000);
 
-  const sales = await prisma.salesData.findMany({
-    where: buildWhere(filters),
-  });
-
-  const totalRevenue = sales.reduce((sum, s) => {
-    return sum + s.revenue;
-  }, 0);
-  const totalUnits = sales.reduce((sum, s) => {
-    return sum + s.units;
-  }, 0);
+  const sales = filterSales(filters);
 
   return {
-    totalRevenue: Math.round(totalRevenue),
-    totalUnits,
+    totalRevenue: Math.round(
+      sales.reduce((sum, s) => {
+        return sum + s.revenue;
+      }, 0),
+    ),
+    totalUnits: sales.reduce((sum, s) => {
+      return sum + s.units;
+    }, 0),
   };
-}
-
-function buildWhere(filters: SalesFilters): Record<string, unknown> {
-  const where: Record<string, unknown> = {};
-
-  // Location filters (cascading)
-  if (filters.city) {
-    where.city = { name: filters.city };
-  } else if (filters.country) {
-    where.city = { country: { name: filters.country } };
-  } else if (filters.region) {
-    where.city = { country: { region: { name: filters.region } } };
-  }
-
-  // Category filters (cascading)
-  if (filters.subcategory) {
-    where.subcategory = { name: filters.subcategory };
-  } else if (filters.category) {
-    where.subcategory = { category: { name: filters.category } };
-  }
-
-  return where;
 }

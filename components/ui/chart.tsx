@@ -149,71 +149,46 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        'border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl',
+        'border-border/50 bg-background flex min-w-36 flex-col gap-2 rounded-lg border px-3 py-2 text-xs shadow-xl',
         className,
       )}
     >
-      {!nestLabel ? tooltipLabel : null}
-      <div className="grid gap-1.5">
+      {!nestLabel && tooltipLabel}
+      <div className="flex flex-col gap-1">
         {payload
           .filter(item => {
             return item.type !== 'none';
           })
-          .map((item, index) => {
+          .map(item => {
             const key = `${nameKey || item.name || item.dataKey || 'value'}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
             const indicatorColor = color || item.payload.fill || item.color;
-
             return (
-              <div
-                key={item.dataKey}
-                className={cn(
-                  '[&>svg]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5',
-                  indicator === 'dot' && 'items-center',
-                )}
-              >
-                {formatter && item?.value !== undefined && item.name ? (
-                  formatter(item.value, item.name, item, index, item.payload)
+              <div key={item.dataKey} className="flex items-center gap-2">
+                {itemConfig?.icon ? (
+                  <itemConfig.icon />
                 ) : (
-                  <>
-                    {itemConfig?.icon ? (
-                      <itemConfig.icon />
-                    ) : (
-                      !hideIndicator && (
-                        <div
-                          className={cn('shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)', {
-                            'h-2.5 w-2.5': indicator === 'dot',
-                            'my-0.5': nestLabel && indicator === 'dashed',
-                            'w-0 border-[1.5px] border-dashed bg-transparent': indicator === 'dashed',
-                            'w-1': indicator === 'line',
-                          })}
-                          style={
-                            {
-                              '--color-bg': indicatorColor,
-                              '--color-border': indicatorColor,
-                            } as React.CSSProperties
-                          }
-                        />
-                      )
-                    )}
+                  !hideIndicator && (
                     <div
-                      className={cn(
-                        'flex flex-1 justify-between leading-none',
-                        nestLabel ? 'items-end' : 'items-center',
-                      )}
-                    >
-                      <div className="grid gap-1.5">
-                        {nestLabel ? tooltipLabel : null}
-                        <span className="text-muted-foreground">{itemConfig?.label || item.name}</span>
-                      </div>
-                      {item.value && (
-                        <span className="text-foreground font-mono font-medium tabular-nums">
-                          {item.value.toLocaleString()}
-                        </span>
-                      )}
-                    </div>
-                  </>
+                      className={cn('shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)', {
+                        'h-2.5 w-2.5': indicator === 'dot',
+                        'my-0.5': nestLabel && indicator === 'dashed',
+                        'w-0 border-[1.5px] border-dashed bg-transparent': indicator === 'dashed',
+                        'w-1': indicator === 'line',
+                      })}
+                      style={
+                        {
+                          '--color-bg': indicatorColor,
+                          '--color-border': indicatorColor,
+                        } as React.CSSProperties
+                      }
+                    />
+                  )
                 )}
+                <span className="text-muted-foreground min-w-16">{itemConfig?.label || item.name}</span>
+                <span className="text-foreground text-right font-mono font-semibold tabular-nums">
+                  {item.value?.toLocaleString() ?? ''}
+                </span>
               </div>
             );
           })}
