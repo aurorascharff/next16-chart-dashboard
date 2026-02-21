@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/db';
+import { CATEGORIES } from '@/data/mock/sales-data';
 import { slow } from '@/utils/slow';
 
 export async function GET(request: NextRequest) {
@@ -11,11 +11,20 @@ export async function GET(request: NextRequest) {
     return NextResponse.json([]);
   }
 
-  const subcategories = await prisma.subcategory.findMany({
-    orderBy: { name: 'asc' },
-    select: { name: true },
-    where: { category: { name: category } },
+  const categoryData = CATEGORIES.find(c => {
+    return c.name === category;
   });
+  if (!categoryData) {
+    return NextResponse.json([]);
+  }
+
+  const subcategories = categoryData.subcategories
+    .map(name => {
+      return { name };
+    })
+    .sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
 
   return NextResponse.json(subcategories);
 }

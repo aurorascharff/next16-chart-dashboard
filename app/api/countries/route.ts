@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/db';
+import { REGIONS_DATA } from '@/data/mock/sales-data';
 import { slow } from '@/utils/slow';
 
 export async function GET(request: NextRequest) {
@@ -11,11 +11,20 @@ export async function GET(request: NextRequest) {
     return NextResponse.json([]);
   }
 
-  const countries = await prisma.country.findMany({
-    orderBy: { name: 'asc' },
-    select: { name: true },
-    where: { region: { name: region } },
+  const regionData = REGIONS_DATA.find(r => {
+    return r.name === region;
   });
+  if (!regionData) {
+    return NextResponse.json([]);
+  }
+
+  const countries = regionData.countries
+    .map(c => {
+      return { name: c.name };
+    })
+    .sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
 
   return NextResponse.json(countries);
 }

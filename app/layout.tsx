@@ -20,8 +20,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  description: 'A Next.js 16 sales analytics dashboard with cascading filters, Prisma, Tailwind CSS, and shadcn/ui',
-  title: 'next16-chart-dashboard',
+  description: 'A Next.js 16 sales analytics dashboard with cascading filters, Tailwind CSS, and shadcn/ui',
+  title: 'Next 16 Chart Dashboard',
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {

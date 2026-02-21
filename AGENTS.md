@@ -28,7 +28,6 @@ Always run `npm run build` and `npm run lint` before committing. Fix any errors 
 - Tailwind CSS 4.x
 - shadcn/ui components (`components/ui/`)
 - Base UI (`@base-ui/react`) for custom interactive components
-- Prisma ORM
 - nuqs for URL search param state
 - SWR for client-side data fetching
 - Zod for validation
@@ -81,7 +80,6 @@ data/
   queries/                # Server-side queries with cache()
   actions/                # Server Functions (mutations)
 lib/                      # Utility functions, search param definitions
-prisma/                   # Prisma schema and seeds
 public/                   # Static assets
 ```
 
@@ -137,16 +135,6 @@ Add `'use client'` only when needed for:
 - **Actions** in `data/actions/` — use `"use server"` directive, invalidate with `revalidateTag()`, `revalidatePath()`, or `router.refresh()`
 - Use `startTransition` or `useTransition` for pending state and automatic error handling
 
-## Prisma
-
-```bash
-npm run prisma.push      # Push schema changes to DB
-npm run prisma.seed      # Seed the database
-npm run prisma.studio    # Open Prisma Studio
-npm run prisma.migrate   # Run migrations
-npm run prisma.generate  # Generate Prisma client
-```
-
 ## Error Handling
 
 - Use `error.tsx` for error boundaries
@@ -156,8 +144,6 @@ npm run prisma.generate  # Generate Prisma client
 
 ## Important Files
 
-- `db.ts` — Prisma client instance
-- `prisma/schema.prisma` — Database schema
 - `lib/utils.ts` — Utility functions including `cn()`
 - `lib/searchParams.ts` — nuqs search param parsers and cache
 - `next.config.ts` — `typedRoutes`, `cacheComponents`, `reactCompiler`

@@ -2,7 +2,7 @@
 
 A sales dashboard exploring **dynamic data patterns with Next.js 16's Cache Components**. Features cascading filters (Region → Country + City in parallel, Category → Subcategory), streaming UI, URL state, and pending UI.
 
-Built with Next.js 16, React 19, Prisma, TailwindCSS v4, and shadcn/ui (Base UI).
+Built with Next.js 16, React 19, TailwindCSS v4, and shadcn/ui (Base UI).
 
 ## Getting Started
 
@@ -12,23 +12,6 @@ bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Prisma Setup
-
-This project uses SQLite with a local database file (`dev.db`). No environment configuration needed.
-
-```bash
-bun run prisma.generate   # Generate the Prisma client
-bun run prisma.push       # Push schema to database
-bun run prisma.seed       # Seed initial data
-bun run prisma.studio     # View data in Prisma Studio
-```
-
-**Using Prisma Postgres instead:** Change the provider in `prisma/schema.prisma` to `postgresql`, update `db.ts` to use `@prisma/adapter-pg`, and set your connection string in `.env`:
-
-```env
-DATABASE_URL="postgres://..."
-```
 
 ## Project Structure
 
