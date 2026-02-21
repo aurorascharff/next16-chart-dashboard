@@ -20,7 +20,7 @@ export const getMonthlyData = cache(async (filters: SalesFilters) => {
 });
 
 async function getMonthlyDataCached(filters: SalesFilters) {
-  'use cache';
+  'use cache: remote';
   cacheLife('hours');
 
   await slow(3000);
@@ -53,7 +53,7 @@ export const getCategoryData = cache(async (filters: SalesFilters) => {
 });
 
 async function getCategoryDataCached(filters: SalesFilters) {
-  'use cache';
+  'use cache: remote';
   cacheLife('hours');
 
   await slow(2000);
@@ -84,7 +84,7 @@ export const getSummaryData = cache(async (filters: SalesFilters) => {
 });
 
 async function getSummaryDataCached(filters: SalesFilters) {
-  'use cache';
+  'use cache: remote';
   cacheLife('hours');
 
   await slow(2000);
