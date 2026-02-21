@@ -1,4 +1,4 @@
-# next16-chart-dashboard
+# Next 16 Chart Dashboard
 
 A sales dashboard exploring Async React and dynamic data patterns with Next.js 16's Cache Components. Features cascading filters (Region → Country + City in parallel, Category → Subcategory), streaming, URL-driven filter state, and optimistic updates. Built with TailwindCSS v4 and shadcn/ui.
 
