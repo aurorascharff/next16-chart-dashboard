@@ -5,9 +5,9 @@ import { prisma } from '@/db';
 import { slow } from '@/utils/slow';
 
 type SalesFilters = {
-  city?: string;
-  country?: string;
-  region?: string;
+  city?: string | null;
+  country?: string | null;
+  region?: string | null;
 };
 
 function buildWhere(filters: SalesFilters): Record<string, unknown> {
