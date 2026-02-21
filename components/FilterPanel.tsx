@@ -29,17 +29,6 @@ const EMPTY_FILTERS: FilterValues = {
   subcategory: null,
 };
 
-function buildUrl(params: FilterValues): string {
-  const sp = new URLSearchParams();
-  if (params.region) sp.set('region', params.region);
-  if (params.country) sp.set('country', params.country);
-  if (params.city) sp.set('city', params.city);
-  if (params.category) sp.set('category', params.category);
-  if (params.subcategory) sp.set('subcategory', params.subcategory);
-  const qs = sp.toString();
-  return qs ? `?${qs}` : '?';
-}
-
 export function FilterPanel() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -189,4 +178,15 @@ export function FilterPanelSkeleton() {
       <Skeleton className="hidden h-4 w-16 sm:block" />
     </Button>
   );
+}
+
+function buildUrl(params: FilterValues): string {
+  const sp = new URLSearchParams();
+  if (params.region) sp.set('region', params.region);
+  if (params.country) sp.set('country', params.country);
+  if (params.city) sp.set('city', params.city);
+  if (params.category) sp.set('category', params.category);
+  if (params.subcategory) sp.set('subcategory', params.subcategory);
+  const qs = sp.toString();
+  return qs ? `?${qs}` : '?';
 }
