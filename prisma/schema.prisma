@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client"
+    output   = "../generated/prisma"
+}
+
+datasource db {
+    provider = "sqlite"
+}
+
+model Region {
+    id        String    @id @default(cuid())
+    name      String    @unique
+    countries Country[]
+}
+
+model Country {
+    id       String @id @default(cuid())
+    name     String
+    regionId String
+    region   Region @relation(fields: [regionId], references: [id])
+    cities   City[]
+
+    @@unique([name, regionId])
+}
+
+model City {
+    id        String      @id @default(cuid())
+    name      String
+    countryId String
+    country   Country     @relation(fields: [countryId], references: [id])
+    sales     SalesData[]
+
+    @@unique([name, countryId])
+}
+
+model SalesData {
+    id       String @id @default(cuid())
+    cityId   String
+    city     City   @relation(fields: [cityId], references: [id])
+    month    String // e.g. "2025-01", "2025-02"
+    category String // e.g. "Electronics", "Clothing", "Food"
+    revenue  Float
+    units    Int
+}
