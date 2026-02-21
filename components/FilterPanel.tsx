@@ -2,7 +2,7 @@
 
 import { Filter, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useOptimistic } from 'react';
+import { startTransition, useOptimistic } from 'react';
 import useSWR from 'swr';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -103,7 +103,7 @@ export function FilterPanel() {
                 options={regions}
                 isLoading={regionsLoading}
                 action={value => {
-                  return applyFiltersAction({ city: null, country: null, region: value });
+                  applyFiltersAction({ city: null, country: null, region: value });
                 }}
               />
               <Select
@@ -114,7 +114,7 @@ export function FilterPanel() {
                 disabled={!optimisticFilters.region}
                 disabledPlaceholder="Select a region first"
                 action={value => {
-                  return applyFiltersAction({ city: null, country: value });
+                  applyFiltersAction({ city: null, country: value });
                 }}
               />
               <Select
@@ -125,7 +125,7 @@ export function FilterPanel() {
                 disabled={!optimisticFilters.region}
                 disabledPlaceholder="Select a region first"
                 action={value => {
-                  return applyFiltersAction({ city: value });
+                  applyFiltersAction({ city: value });
                 }}
               />
             </div>
@@ -138,7 +138,7 @@ export function FilterPanel() {
                 options={categories}
                 isLoading={categoriesLoading}
                 action={value => {
-                  return applyFiltersAction({ category: value, subcategory: null });
+                  applyFiltersAction({ category: value, subcategory: null });
                 }}
               />
               <Select
@@ -149,21 +149,24 @@ export function FilterPanel() {
                 disabled={!optimisticFilters.category}
                 disabledPlaceholder="Select a category first"
                 action={value => {
-                  return applyFiltersAction({ subcategory: value });
+                  applyFiltersAction({ subcategory: value });
                 }}
               />
             </div>
           </div>
           <SheetFooter>
             <Button
+              disabled={!activeCount}
               variant="outline"
               onClick={() => {
-                return applyFiltersAction({
-                  category: null,
-                  city: null,
-                  country: null,
-                  region: null,
-                  subcategory: null,
+                startTransition(() => {
+                  applyFiltersAction({
+                    category: null,
+                    city: null,
+                    country: null,
+                    region: null,
+                    subcategory: null,
+                  });
                 });
               }}
               className="gap-2"
