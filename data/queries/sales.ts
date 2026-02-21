@@ -2,6 +2,7 @@ import 'server-only';
 
 import { cacheLife } from 'next/cache';
 import { cache } from 'react';
+import { checkAuth } from '@/data/queries/user';
 import { prisma } from '@/db';
 import { slow } from '@/utils/slow';
 
@@ -14,6 +15,11 @@ type SalesFilters = {
 };
 
 export const getMonthlyData = cache(async (filters: SalesFilters) => {
+  await checkAuth();
+  return getMonthlyDataCached(filters);
+});
+
+async function getMonthlyDataCached(filters: SalesFilters) {
   'use cache';
   cacheLife('hours');
 
@@ -39,9 +45,14 @@ export const getMonthlyData = cache(async (filters: SalesFilters) => {
       units: unitsByMonth.get(month) ?? 0,
     };
   });
-});
+}
 
 export const getCategoryData = cache(async (filters: SalesFilters) => {
+  await checkAuth();
+  return getCategoryDataCached(filters);
+});
+
+async function getCategoryDataCached(filters: SalesFilters) {
   'use cache';
   cacheLife('hours');
 
@@ -65,9 +76,14 @@ export const getCategoryData = cache(async (filters: SalesFilters) => {
       revenue: Math.round(revenue),
     };
   });
-});
+}
 
 export const getSummaryData = cache(async (filters: SalesFilters) => {
+  await checkAuth();
+  return getSummaryDataCached(filters);
+});
+
+async function getSummaryDataCached(filters: SalesFilters) {
   'use cache';
   cacheLife('hours');
 
@@ -88,7 +104,7 @@ export const getSummaryData = cache(async (filters: SalesFilters) => {
     totalRevenue: Math.round(totalRevenue),
     totalUnits,
   };
-});
+}
 
 function buildWhere(filters: SalesFilters): Record<string, unknown> {
   const where: Record<string, unknown> = {};

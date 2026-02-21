@@ -4,7 +4,7 @@ import { FilterPanel, FilterPanelSkeleton } from '@/components/dashboard/FilterP
 import { RevenueBarChart, RevenueChartSkeleton } from '@/components/dashboard/RevenueBarChart';
 import { SummaryCards, SummaryCardsSkeleton } from '@/components/dashboard/SummaryCards';
 import { UnitsAreaChart, UnitsChartSkeleton } from '@/components/dashboard/UnitsAreaChart';
-import { UserGreeting, UserGreetingSkeleton } from '@/components/dashboard/UserGreeting';
+
 import { getCategoryData, getMonthlyData, getSummaryData } from '@/data/queries/sales';
 import { filterCache } from '@/lib/searchParams';
 
@@ -12,9 +12,10 @@ export default function Page({ searchParams }: PageProps<'/'>) {
   return (
     <div className="group mx-auto flex max-w-7xl flex-col gap-6 p-6 md:p-10">
       <div className="flex items-center justify-between">
-        <Suspense fallback={<UserGreetingSkeleton />}>
-          <UserGreeting />
-        </Suspense>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Sales Dashboard</h1>
+          <p className="text-muted-foreground">Analyze sales data across regions, countries, and cities.</p>
+        </div>
         <Suspense fallback={<FilterPanelSkeleton />}>
           <FilterPanel />
         </Suspense>

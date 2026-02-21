@@ -10,7 +10,7 @@ type Props = {
 
 export function StatusCard({ icon: Icon, title, description, children }: Props) {
   return (
-    <Card className="text-center">
+    <Card className="w-full text-center">
       <CardHeader>
         {Icon && (
           <div className="mx-auto mb-2">

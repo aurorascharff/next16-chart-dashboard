@@ -1,3 +1,4 @@
+import { unauthorized } from 'next/navigation';
 import { cache } from 'react';
 import { slow } from '@/utils/slow';
 
@@ -9,7 +10,7 @@ export type User = {
   role: string;
 };
 
-export const getCurrentUser = cache(async (): Promise<User> => {
+export const getCurrentUser = cache(async (): Promise<User | null> => {
   await slow(500);
 
   return {
@@ -20,3 +21,11 @@ export const getCurrentUser = cache(async (): Promise<User> => {
     role: 'Branch Manager',
   };
 });
+
+export async function checkAuth(): Promise<User> {
+  const user = await getCurrentUser();
+  if (!user) {
+    unauthorized();
+  }
+  return user;
+}
