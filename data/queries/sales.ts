@@ -103,7 +103,7 @@ async function getSummaryDataCached(filters: SalesFilters) {
   };
 }
 
-export async function getCategories() {
+export const getCategories = cache(async function getCategories() {
   'use cache: remote';
   cacheLife('hours');
 
@@ -114,9 +114,9 @@ export async function getCategories() {
   }).sort((a, b) => {
     return a.name.localeCompare(b.name);
   });
-}
+});
 
-export async function getSubcategories(category: string) {
+export const getSubcategories = cache(async function getSubcategories(category: string) {
   'use cache: remote';
   cacheLife('hours');
 
@@ -134,9 +134,9 @@ export async function getSubcategories(category: string) {
     .sort((a, b) => {
       return a.name.localeCompare(b.name);
     });
-}
+});
 
-export async function getRegions() {
+export const getRegions = cache(async function getRegions() {
   'use cache: remote';
   cacheLife('hours');
 
@@ -147,9 +147,9 @@ export async function getRegions() {
   }).sort((a, b) => {
     return a.name.localeCompare(b.name);
   });
-}
+});
 
-export async function getCountries(region: string) {
+export const getCountries = cache(async function getCountries(region: string) {
   'use cache: remote';
   cacheLife('hours');
 
@@ -167,9 +167,9 @@ export async function getCountries(region: string) {
     .sort((a, b) => {
       return a.name.localeCompare(b.name);
     });
-}
+});
 
-export async function getCities(region: string, country?: string | null) {
+export const getCities = cache(async function getCities(region: string, country?: string | null) {
   'use cache: remote';
   cacheLife('hours');
 
@@ -195,4 +195,4 @@ export async function getCities(region: string, country?: string | null) {
     .sort((a, b) => {
       return a.name.localeCompare(b.name);
     });
-}
+});
