@@ -132,7 +132,7 @@ export function FilterPanel() {
 
           <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-4 py-2">
             <div className="flex flex-col gap-4">
-              <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider">Location</p>
+              <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">Location</p>
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">Region</label>
                 <Select value={region} onValueChange={handleRegionChange}>
@@ -155,7 +155,9 @@ export function FilterPanel() {
                 <Select value={country} onValueChange={handleCountryChange} disabled={!region}>
                   <SelectTrigger className="w-full" disabled={!region}>
                     <SelectValue
-                      placeholder={!region ? 'Select a region first' : countriesLoading ? 'Loading...' : 'Select country'}
+                      placeholder={
+                        !region ? 'Select a region first' : countriesLoading ? 'Loading...' : 'Select country'
+                      }
                     />
                   </SelectTrigger>
                   <SelectContent>
@@ -191,7 +193,7 @@ export function FilterPanel() {
             </div>
             <Separator />
             <div className="flex flex-col gap-4">
-              <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider">Product</p>
+              <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">Product</p>
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">Category</label>
                 <Select value={category} onValueChange={handleCategoryChange}>
@@ -215,7 +217,11 @@ export function FilterPanel() {
                   <SelectTrigger className="w-full" disabled={!category}>
                     <SelectValue
                       placeholder={
-                        !category ? 'Select a category first' : subcategoriesLoading ? 'Loading...' : 'Select subcategory'
+                        !category
+                          ? 'Select a category first'
+                          : subcategoriesLoading
+                            ? 'Loading...'
+                            : 'Select subcategory'
                       }
                     />
                   </SelectTrigger>
