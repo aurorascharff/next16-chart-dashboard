@@ -104,6 +104,9 @@ async function getSummaryDataCached(filters: SalesFilters) {
 }
 
 export async function getCategories() {
+  'use cache: remote';
+  cacheLife('hours');
+
   await slow();
 
   return CATEGORIES.map(c => {
@@ -114,6 +117,9 @@ export async function getCategories() {
 }
 
 export async function getSubcategories(category: string) {
+  'use cache: remote';
+  cacheLife('hours');
+
   await slow();
 
   const categoryData = CATEGORIES.find(c => {
@@ -131,6 +137,9 @@ export async function getSubcategories(category: string) {
 }
 
 export async function getRegions() {
+  'use cache: remote';
+  cacheLife('hours');
+
   await slow();
 
   return REGIONS_DATA.map(r => {
@@ -141,6 +150,9 @@ export async function getRegions() {
 }
 
 export async function getCountries(region: string) {
+  'use cache: remote';
+  cacheLife('hours');
+
   await slow();
 
   const regionData = REGIONS_DATA.find(r => {
@@ -158,6 +170,9 @@ export async function getCountries(region: string) {
 }
 
 export async function getCities(region: string, country?: string | null) {
+  'use cache: remote';
+  cacheLife('hours');
+
   await slow();
 
   const regionData = REGIONS_DATA.find(r => {
