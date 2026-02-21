@@ -1,8 +1,8 @@
 'use client';
 
 import { Filter, X } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useOptimistic, useTransition } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useOptimistic } from 'react';
 import useSWR from 'swr';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -20,6 +20,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { fetcher } from '@/lib/fetcher';
 import type { FilterValues } from '@/types/filters';
 import { Select } from './design/Select';
+import type { Route } from 'next';
 
 const EMPTY_FILTERS: FilterValues = {
   category: null,
@@ -30,44 +31,53 @@ const EMPTY_FILTERS: FilterValues = {
 };
 
 export function FilterPanel() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
-  const [filters, setFilters] = useOptimistic<FilterValues>({
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const committedFilters: FilterValues = {
     category: searchParams.get('category'),
     city: searchParams.get('city'),
     country: searchParams.get('country'),
     region: searchParams.get('region'),
     subcategory: searchParams.get('subcategory'),
-  });
+  };
+
+  const [optimisticFilters, setOptimisticFilters] = useOptimistic(
+    committedFilters,
+    (current: FilterValues, patch: Partial<FilterValues>) => {
+      return { ...current, ...patch };
+    },
+  );
+
+  const isPending = optimisticFilters !== committedFilters;
 
   const { data: regions, isLoading: regionsLoading } = useSWR<{ name: string }[]>('/api/regions', fetcher);
   const { data: categories, isLoading: categoriesLoading } = useSWR<{ name: string }[]>('/api/categories', fetcher);
   const { data: countries, isLoading: countriesLoading } = useSWR<{ name: string }[]>(
-    filters.region ? `/api/countries?region=${encodeURIComponent(filters.region)}` : null,
+    optimisticFilters.region ? `/api/countries?region=${encodeURIComponent(optimisticFilters.region)}` : null,
     fetcher,
   );
   const { data: subcategories, isLoading: subcategoriesLoading } = useSWR<{ name: string }[]>(
-    filters.category ? `/api/subcategories?category=${encodeURIComponent(filters.category)}` : null,
+    optimisticFilters.category ? `/api/subcategories?category=${encodeURIComponent(optimisticFilters.category)}` : null,
     fetcher,
   );
   const { data: cities, isLoading: citiesLoading } = useSWR<{ name: string }[]>(
-    filters.region
-      ? `/api/cities?region=${encodeURIComponent(filters.region)}${
-          filters.country ? `&country=${encodeURIComponent(filters.country)}` : ''
+    optimisticFilters.region
+      ? `/api/cities?region=${encodeURIComponent(optimisticFilters.region)}${
+          optimisticFilters.country ? `&country=${encodeURIComponent(optimisticFilters.country)}` : ''
         }`
       : null,
     fetcher,
   );
 
-  function applyFilters(next: FilterValues) {
-    startTransition(() => {
-      setFilters(next);
-      router.replace(buildUrl(next) as never);
-    });
+  function applyFiltersAction(patch: Partial<FilterValues>) {
+    const next = { ...optimisticFilters, ...patch };
+    setOptimisticFilters(patch);
+    router.replace(buildUrl(pathname, next) as Route);
   }
 
-  const activeCount = Object.values(filters).filter(Boolean).length;
+  const activeCount = Object.values(optimisticFilters).filter(Boolean).length;
 
   return (
     <div data-pending={isPending ? '' : undefined}>
@@ -97,33 +107,33 @@ export function FilterPanel() {
               <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">Location</p>
               <Select
                 label="Region"
-                value={filters.region}
+                value={optimisticFilters.region}
                 options={regions}
                 isLoading={regionsLoading}
                 action={value => {
-                  applyFilters({ ...filters, city: null, country: null, region: value });
+                  return applyFiltersAction({ city: null, country: null, region: value });
                 }}
               />
               <Select
                 label="Country"
-                value={filters.country}
+                value={optimisticFilters.country}
                 options={countries}
                 isLoading={countriesLoading}
-                disabled={!filters.region}
+                disabled={!optimisticFilters.region}
                 disabledPlaceholder="Select a region first"
                 action={value => {
-                  applyFilters({ ...filters, city: null, country: value });
+                  return applyFiltersAction({ city: null, country: value });
                 }}
               />
               <Select
                 label="City"
-                value={filters.city}
+                value={optimisticFilters.city}
                 options={cities}
                 isLoading={citiesLoading}
-                disabled={!filters.region}
+                disabled={!optimisticFilters.region}
                 disabledPlaceholder="Select a region first"
                 action={value => {
-                  applyFilters({ ...filters, city: value });
+                  return applyFiltersAction({ city: value });
                 }}
               />
             </div>
@@ -132,22 +142,22 @@ export function FilterPanel() {
               <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">Product</p>
               <Select
                 label="Category"
-                value={filters.category}
+                value={optimisticFilters.category}
                 options={categories}
                 isLoading={categoriesLoading}
                 action={value => {
-                  applyFilters({ ...filters, category: value, subcategory: null });
+                  return applyFiltersAction({ category: value, subcategory: null });
                 }}
               />
               <Select
                 label="Subcategory"
-                value={filters.subcategory}
+                value={optimisticFilters.subcategory}
                 options={subcategories}
                 isLoading={subcategoriesLoading}
-                disabled={!filters.category}
+                disabled={!optimisticFilters.category}
                 disabledPlaceholder="Select a category first"
                 action={value => {
-                  applyFilters({ ...filters, subcategory: value });
+                  return applyFiltersAction({ subcategory: value });
                 }}
               />
             </div>
@@ -156,7 +166,7 @@ export function FilterPanel() {
             <Button
               variant="outline"
               onClick={() => {
-                applyFilters(EMPTY_FILTERS);
+                return applyFiltersAction(EMPTY_FILTERS);
               }}
               className="gap-2"
             >
@@ -180,7 +190,7 @@ export function FilterPanelSkeleton() {
   );
 }
 
-function buildUrl(params: FilterValues): string {
+function buildUrl(pathname: string, params: FilterValues): string {
   const sp = new URLSearchParams();
   if (params.region) sp.set('region', params.region);
   if (params.country) sp.set('country', params.country);
@@ -188,5 +198,5 @@ function buildUrl(params: FilterValues): string {
   if (params.category) sp.set('category', params.category);
   if (params.subcategory) sp.set('subcategory', params.subcategory);
   const qs = sp.toString();
-  return qs ? `?${qs}` : '?';
+  return qs ? `${pathname}?${qs}` : pathname;
 }
