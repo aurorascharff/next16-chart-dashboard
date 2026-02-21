@@ -58,8 +58,9 @@ export function SummaryCardsSkeleton() {
       {Array.from({ length: 3 }).map((_, i) => {
         return (
           <Card key={i}>
-            <CardHeader className="pb-2">
-              <Skeleton className="h-4 w-24" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <Skeleton className="h-6 w-24" />
+              <Skeleton className="size-4" />
             </CardHeader>
             <CardContent>
               <Skeleton className="h-8 w-32" />

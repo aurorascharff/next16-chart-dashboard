@@ -9,21 +9,13 @@ export function UserGreeting() {
   const time = useLocalTime();
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{user?.branch} Dashboard</h1>
-      <p className="text-muted-foreground">
-        Welcome, {user?.name} — {user?.role}
-        {time && <span className="ml-2">· {time}</span>}
-      </p>
-    </div>
+    <p className="text-muted-foreground">
+      Welcome, {user?.name} — {user?.role} · {user?.branch}
+      {time && <span className="ml-2">· {time}</span>}
+    </p>
   );
 }
 
 export function UserGreetingSkeleton() {
-  return (
-    <div>
-      <Skeleton className="h-9 w-64" />
-      <Skeleton className="mt-1 h-5 w-48" />
-    </div>
-  );
+  return <Skeleton className="h-5 w-64" />;
 }
