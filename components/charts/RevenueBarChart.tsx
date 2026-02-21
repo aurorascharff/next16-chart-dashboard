@@ -47,7 +47,20 @@ export function RevenueBarChart({ dataPromise }: Props) {
                 return `$${(v / 1000).toFixed(0)}k`;
               }}
             />
-            <ChartTooltip content={<ChartTooltipContent />} />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  nameKey="category"
+                  formatter={value => {
+                    return new Intl.NumberFormat('en-US', {
+                      currency: 'USD',
+                      maximumFractionDigits: 0,
+                      style: 'currency',
+                    }).format(value as number);
+                  }}
+                />
+              }
+            />
             <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ChartContainer>

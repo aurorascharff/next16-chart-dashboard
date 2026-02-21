@@ -1,12 +1,17 @@
 'use client';
 
 import { use } from 'react';
-import { Cell, Legend, Pie, PieChart } from 'recharts';
+import { Cell, Pie, PieChart } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart';
 import { Skeleton } from '../ui/skeleton';
-
-const COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)', 'var(--chart-4)', 'var(--chart-5)'];
 
 const chartConfig = {
   Clothing: { color: 'var(--chart-2)', label: 'Clothing' },
@@ -31,11 +36,24 @@ export function CategoryPieChart({ dataPromise }: Props) {
       <CardContent>
         <ChartContainer config={chartConfig} className="mx-auto h-[300px] w-full">
           <PieChart accessibilityLayer>
-            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-            <Legend verticalAlign="bottom" />
-            <Pie data={data} dataKey="revenue" nameKey="category" cx="50%" cy="50%" outerRadius={100} label>
-              {data.map((_, index) => {
-                return <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />;
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  nameKey="category"
+                  formatter={value => {
+                    return new Intl.NumberFormat('en-US', {
+                      currency: 'USD',
+                      maximumFractionDigits: 0,
+                      style: 'currency',
+                    }).format(value as number);
+                  }}
+                />
+              }
+            />
+            <ChartLegend content={<ChartLegendContent nameKey="category" />} />
+            <Pie data={data} dataKey="revenue" nameKey="category" cx="50%" cy="50%" outerRadius={100}>
+              {data.map((entry, index) => {
+                return <Cell key={`cell-${index}`} fill={`var(--chart-${(index % 5) + 1})`} />;
               })}
             </Pie>
           </PieChart>

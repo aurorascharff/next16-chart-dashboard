@@ -159,7 +159,7 @@ function ChartTooltipContent({
           .filter(item => {
             return item.type !== 'none';
           })
-          .map(item => {
+          .map((item, index) => {
             const key = `${nameKey || item.name || item.dataKey || 'value'}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
             const indicatorColor = color || item.payload.fill || item.color;
@@ -187,7 +187,11 @@ function ChartTooltipContent({
                 )}
                 <span className="text-muted-foreground min-w-16">{itemConfig?.label || item.name}</span>
                 <span className="text-foreground text-right font-mono font-semibold tabular-nums">
-                  {item.value?.toLocaleString() ?? ''}
+                  {formatter
+                    ? item.value !== undefined
+                      ? formatter(item.value, item.name ?? 'value', item, index, item.payload)
+                      : ''
+                    : (item.value?.toLocaleString() ?? '')}
                 </span>
               </div>
             );
