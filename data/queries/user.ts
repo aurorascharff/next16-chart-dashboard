@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import { unauthorized } from 'next/navigation';
 import { cache } from 'react';
 import { slow } from '@/utils/slow';
@@ -12,6 +13,7 @@ export type User = {
 
 export const getCurrentUser = cache(async (): Promise<User | null> => {
   await slow(500);
+  await cookies();
 
   return {
     branch: 'Oslo HQ',
