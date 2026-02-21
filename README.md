@@ -4,8 +4,6 @@ A sales dashboard exploring Async React and dynamic data fetching with Next.js 1
 
 Built with Next.js 16, React 19, TailwindCSS v4, and shadcn/ui (Base UI).
 
-Toggle "disable cache" in DevTools to see the dynamic data patterns in action. With caching enabled, data for the filters and charts is fetched once and reused across users. With caching disabled, everything is dynamic and you can see loading states and optimistic updates.
-
 ## Getting Started
 
 ```bash
