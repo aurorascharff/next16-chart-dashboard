@@ -11,7 +11,7 @@ import { filterCache } from '@/lib/searchParams';
 export default function Page({ searchParams }: PageProps<'/'>) {
   return (
     <div className="group mx-auto flex max-w-7xl flex-col gap-6 p-6 md:p-10">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Suspense fallback={<UserGreetingSkeleton />}>
           <UserGreeting />
         </Suspense>

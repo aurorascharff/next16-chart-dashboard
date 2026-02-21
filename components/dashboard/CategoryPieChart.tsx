@@ -1,7 +1,7 @@
 'use client';
 
 import { use } from 'react';
-import { Cell, Pie, PieChart } from 'recharts';
+import { Cell, Legend, Pie, PieChart } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Skeleton } from '../ui/skeleton';
@@ -32,6 +32,7 @@ export function CategoryPieChart({ dataPromise }: Props) {
         <ChartContainer config={chartConfig} className="mx-auto h-[300px] w-full">
           <PieChart accessibilityLayer>
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+            <Legend verticalAlign="bottom" />
             <Pie data={data} dataKey="revenue" nameKey="category" cx="50%" cy="50%" outerRadius={100} label>
               {data.map((_, index) => {
                 return <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />;
