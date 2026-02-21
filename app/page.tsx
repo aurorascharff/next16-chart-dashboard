@@ -1,11 +1,11 @@
 import { Suspense } from 'react';
-import { CategoryPieChart, CategoryChartSkeleton } from '@/components/dashboard/CategoryPieChart';
-import { FilterPanel, FilterPanelSkeleton } from '@/components/dashboard/FilterPanel';
-import { RevenueBarChart, RevenueChartSkeleton } from '@/components/dashboard/RevenueBarChart';
-import { SummaryCards, SummaryCardsSkeleton } from '@/components/dashboard/SummaryCards';
-import { UnitsAreaChart, UnitsChartSkeleton } from '@/components/dashboard/UnitsAreaChart';
-import { UserGreeting, UserGreetingSkeleton } from '@/components/dashboard/UserGreeting';
-import { getCategoryData, getMonthlyData, getSummaryData } from '@/data/queries/sales';
+import { FilterPanel, FilterPanelSkeleton } from '@/components/FilterPanel';
+import { SummaryCards, SummaryCardsSkeleton } from '@/components/SummaryCards';
+import { UserGreeting, UserGreetingSkeleton } from '@/components/UserGreeting';
+import { CategoryPieChart, CategoryChartSkeleton } from '@/components/charts/CategoryPieChart';
+import { RevenueBarChart, RevenueChartSkeleton } from '@/components/charts/RevenueBarChart';
+import { UnitsAreaChart, UnitsChartSkeleton } from '@/components/charts/UnitsAreaChart';
+import { getCategoryData, getMonthlyData } from '@/data/queries/sales';
 import { filterCache } from '@/lib/searchParams';
 
 export default function Page({ searchParams }: PageProps<'/'>) {
@@ -22,7 +22,7 @@ export default function Page({ searchParams }: PageProps<'/'>) {
       </Suspense>
       <div className="flex flex-col gap-6 group-has-data-pending:animate-pulse">
         <Suspense fallback={<SummaryCardsSkeleton />}>
-          <SummaryCardsWrapper searchParams={searchParams} />
+          <SummaryCards searchParams={searchParams} />
         </Suspense>
         <h2 className="text-lg font-semibold tracking-tight">Monthly Trends</h2>
         <div className="grid gap-6 lg:grid-cols-2">
@@ -45,12 +45,6 @@ export default function Page({ searchParams }: PageProps<'/'>) {
 type WrapperProps = {
   searchParams: PageProps<'/'>['searchParams'];
 };
-
-async function SummaryCardsWrapper({ searchParams }: WrapperProps) {
-  const { category, city, country, region, subcategory } = await filterCache.parse(searchParams);
-  const dataPromise = getSummaryData({ category, city, country, region, subcategory });
-  return <SummaryCards dataPromise={dataPromise} />;
-}
 
 async function RevenueChartWrapper({ searchParams }: WrapperProps) {
   const { category, city, country, region, subcategory } = await filterCache.parse(searchParams);

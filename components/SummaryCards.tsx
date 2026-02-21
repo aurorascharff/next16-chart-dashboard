@@ -1,21 +1,16 @@
-'use client';
-
 import { DollarSign, Package, TrendingUp } from 'lucide-react';
-import { use } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-
-type SummaryData = {
-  totalRevenue: number;
-  totalUnits: number;
-};
+import { getSummaryData } from '@/data/queries/sales';
+import { filterCache } from '@/lib/searchParams';
 
 type Props = {
-  dataPromise: Promise<SummaryData>;
+  searchParams: PageProps<'/'>['searchParams'];
 };
 
-export function SummaryCards({ dataPromise }: Props) {
-  const summary = use(dataPromise);
+export async function SummaryCards({ searchParams }: Props) {
+  const { category, city, country, region, subcategory } = await filterCache.parse(searchParams);
+  const summary = await getSummaryData({ category, city, country, region, subcategory });
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
