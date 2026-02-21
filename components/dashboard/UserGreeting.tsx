@@ -17,5 +17,5 @@ export function UserGreeting() {
 }
 
 export function UserGreetingSkeleton() {
-  return <Skeleton className="h-5 w-64" />;
+  return <Skeleton className="h-6 w-64" />;
 }
