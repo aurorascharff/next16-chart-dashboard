@@ -1,12 +1,14 @@
 import { Target } from 'lucide-react';
 import { saveRevenueGoal } from '@/data/actions/preferences';
 import { getRevenueGoal } from '@/data/queries/preferences';
+import { formatCurrency } from '@/lib/utils';
 import { EditableText } from './design/EditableText';
 import { Skeleton } from './ui/skeleton';
 
 export async function RevenueGoal() {
   const goal = await getRevenueGoal();
   const goalStr = goal?.toString() ?? '';
+  const formatted = goal ? formatCurrency(goal) : undefined;
   return (
     <div className="flex items-center gap-2">
       <Target className="text-muted-foreground size-4 shrink-0" />
@@ -14,8 +16,11 @@ export async function RevenueGoal() {
       <EditableText
         value={goalStr}
         action={saveRevenueGoal}
+        displayValue={formatted}
         prefix="$"
         type="number"
+        min={0}
+        max={10000000}
         placeholder="Set a target..."
         className="w-52"
       />

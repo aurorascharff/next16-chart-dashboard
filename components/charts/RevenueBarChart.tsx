@@ -4,6 +4,7 @@ import { use } from 'react';
 import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { formatCurrency } from '@/lib/utils';
 import type { MonthlyData } from '@/types/sales';
 import { Skeleton } from '../ui/skeleton';
 
@@ -61,11 +62,7 @@ export function RevenueBarChart({ monthlyData, revenueGoal }: Props) {
                 <ChartTooltipContent
                   nameKey="revenue"
                   formatter={value => {
-                    return new Intl.NumberFormat('en-US', {
-                      currency: 'USD',
-                      maximumFractionDigits: 0,
-                      style: 'currency',
-                    }).format(value as number);
+                    return formatCurrency(value as number);
                   }}
                 />
               }
@@ -81,10 +78,7 @@ export function RevenueBarChart({ monthlyData, revenueGoal }: Props) {
             <svg width="16" height="2" aria-hidden="true">
               <line x1="0" y1="1" x2="16" y2="1" stroke="oklch(0.3 0.05 260)" strokeWidth="2" strokeDasharray="4 2" />
             </svg>
-            Goal:{' '}
-            {new Intl.NumberFormat('en-US', { currency: 'USD', maximumFractionDigits: 0, style: 'currency' }).format(
-              revenueGoal,
-            )}
+            Goal: {formatCurrency(revenueGoal)}
           </div>
         )}
       </CardContent>

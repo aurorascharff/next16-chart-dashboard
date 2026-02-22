@@ -6,13 +6,11 @@ import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import { Spinner } from '../ui/spinner';
 
-type EditableTextProps = {
+type EditableTextProps = Omit<React.ComponentProps<'input'>, 'value' | 'action'> & {
   value: string;
   action: (value: string) => void | Promise<void>;
-  placeholder?: string;
   prefix?: string;
-  type?: React.HTMLInputTypeAttribute;
-  className?: string;
+  displayValue?: string;
 };
 
 export function EditableText({
@@ -20,8 +18,9 @@ export function EditableText({
   action,
   placeholder = 'Click to edit...',
   prefix,
-  type = 'text',
+  displayValue: displayValueProp,
   className,
+  ...inputProps
 }: EditableTextProps) {
   const [isPending, startTransition] = useTransition();
   const [optimisticValue, setOptimisticValue] = useOptimistic(value);
@@ -42,7 +41,9 @@ export function EditableText({
     setIsEditing(false);
   }
 
-  const displayValue = optimisticValue ? `${prefix ?? ''}${optimisticValue}` : null;
+  const displayValue = optimisticValue
+    ? (displayValueProp ?? `${prefix ?? ''}${optimisticValue}`)
+    : null;
 
   return (
     <div className={cn('flex h-8 items-center gap-1', className)}>
@@ -55,7 +56,7 @@ export function EditableText({
               </span>
             )}
             <input
-              type={type}
+              {...inputProps}
               value={draft}
               onChange={e => {
                 return setDraft(e.target.value);

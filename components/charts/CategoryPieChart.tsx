@@ -11,6 +11,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { formatCurrency } from '@/lib/utils';
 import type { CategoryData } from '@/types/sales';
 import { Skeleton } from '../ui/skeleton';
 
@@ -42,11 +43,7 @@ export function CategoryPieChart({ categoryData }: Props) {
                 <ChartTooltipContent
                   nameKey="category"
                   formatter={value => {
-                    return new Intl.NumberFormat('en-US', {
-                      currency: 'USD',
-                      maximumFractionDigits: 0,
-                      style: 'currency',
-                    }).format(value as number);
+                    return formatCurrency(value as number);
                   }}
                 />
               }
