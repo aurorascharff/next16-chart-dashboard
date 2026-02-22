@@ -4,7 +4,16 @@ import { cache } from 'react';
 import { MOCK_SALES, type MockSaleRecord } from '@/data/mock/sales-data';
 import { CATEGORIES, REGIONS_DATA } from '@/data/mock/sales-data';
 import { checkAuth } from '@/data/queries/user';
-import type { CategoryData, MonthlyData, SummaryData } from '@/types/sales';
+import type {
+  Category,
+  CategoryData,
+  City,
+  Country,
+  MonthlyData,
+  Region,
+  Subcategory,
+  SummaryData,
+} from '@/types/sales';
 import { slow } from '@/utils/slow';
 
 type SalesFilters = {
@@ -31,7 +40,7 @@ export const getMonthlyData = cache(async (filters: SalesFilters) => {
   return getMonthlyDataCached(filters);
 });
 
-async function getMonthlyDataCached(filters: SalesFilters): Promise<MonthlyData[]> {
+async function getMonthlyDataCached(filters: SalesFilters) {
   // 'use cache: remote';
   // cacheLife('hours');
 
@@ -52,7 +61,7 @@ async function getMonthlyDataCached(filters: SalesFilters): Promise<MonthlyData[
       revenue: Math.round(revenue),
       units: unitsByMonth.get(month) ?? 0,
     };
-  });
+  }) as MonthlyData[];
 }
 
 export const getCategoryData = cache(async (filters: SalesFilters) => {
@@ -60,7 +69,7 @@ export const getCategoryData = cache(async (filters: SalesFilters) => {
   return getCategoryDataCached(filters);
 });
 
-async function getCategoryDataCached(filters: SalesFilters): Promise<CategoryData[]> {
+async function getCategoryDataCached(filters: SalesFilters) {
   // 'use cache: remote';
   // cacheLife('hours');
 
@@ -78,7 +87,7 @@ async function getCategoryDataCached(filters: SalesFilters): Promise<CategoryDat
       category,
       revenue: Math.round(revenue),
     };
-  });
+  }) as CategoryData[];
 }
 
 export const getSummaryData = cache(async (filters: SalesFilters) => {
@@ -86,7 +95,7 @@ export const getSummaryData = cache(async (filters: SalesFilters) => {
   return getSummaryDataCached(filters);
 });
 
-async function getSummaryDataCached(filters: SalesFilters): Promise<SummaryData> {
+async function getSummaryDataCached(filters: SalesFilters) {
   // 'use cache: remote';
   // cacheLife('hours');
 
@@ -103,10 +112,10 @@ async function getSummaryDataCached(filters: SalesFilters): Promise<SummaryData>
     totalUnits: sales.reduce((sum, s) => {
       return sum + s.units;
     }, 0),
-  };
+  } as SummaryData;
 }
 
-export const getCategories = cache(async (category?: string) => {
+export const getCategories = cache(async () => {
   // 'use cache: remote';
   // cacheLife('hours');
 
@@ -116,7 +125,7 @@ export const getCategories = cache(async (category?: string) => {
     return { name: c.name };
   }).sort((a, b) => {
     return a.name.localeCompare(b.name);
-  });
+  }) as Category[];
 });
 
 export const getSubcategories = cache(async (category: string) => {
@@ -136,7 +145,7 @@ export const getSubcategories = cache(async (category: string) => {
     })
     .sort((a, b) => {
       return a.name.localeCompare(b.name);
-    });
+    }) as Subcategory[];
 });
 
 export const getRegions = cache(async () => {
@@ -149,7 +158,7 @@ export const getRegions = cache(async () => {
     return { name: r.name };
   }).sort((a, b) => {
     return a.name.localeCompare(b.name);
-  });
+  }) as Region[];
 });
 
 export const getCountries = cache(async (region: string) => {
@@ -169,7 +178,7 @@ export const getCountries = cache(async (region: string) => {
     })
     .sort((a, b) => {
       return a.name.localeCompare(b.name);
-    });
+    }) as Country[];
 });
 
 export const getCities = cache(async (region: string, country?: string | null) => {
@@ -197,5 +206,5 @@ export const getCities = cache(async (region: string, country?: string | null) =
     })
     .sort((a, b) => {
       return a.name.localeCompare(b.name);
-    });
+    }) as City[];
 });

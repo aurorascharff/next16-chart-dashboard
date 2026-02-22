@@ -19,6 +19,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetcher } from '@/lib/fetcher';
 import type { FilterValues } from '@/types/filters';
+import type { Category, City, Country, Region, Subcategory } from '@/types/sales';
 import { Select } from './design/Select';
 import type { Route } from 'next';
 
@@ -44,17 +45,17 @@ export function FilterPanel() {
 
   const isPending = optimisticFilters !== committedFilters;
 
-  const { data: regions, isLoading: regionsLoading } = useSWR<{ name: string }[]>('/api/regions', fetcher);
-  const { data: categories, isLoading: categoriesLoading } = useSWR<{ name: string }[]>('/api/categories', fetcher);
-  const { data: countries, isLoading: countriesLoading } = useSWR<{ name: string }[]>(
+  const { data: regions, isLoading: regionsLoading } = useSWR<Region[]>('/api/regions', fetcher);
+  const { data: categories, isLoading: categoriesLoading } = useSWR<Category[]>('/api/categories', fetcher);
+  const { data: countries, isLoading: countriesLoading } = useSWR<Country[]>(
     optimisticFilters.region ? `/api/countries?region=${encodeURIComponent(optimisticFilters.region)}` : null,
     fetcher,
   );
-  const { data: subcategories, isLoading: subcategoriesLoading } = useSWR<{ name: string }[]>(
+  const { data: subcategories, isLoading: subcategoriesLoading } = useSWR<Subcategory[]>(
     optimisticFilters.category ? `/api/subcategories?category=${encodeURIComponent(optimisticFilters.category)}` : null,
     fetcher,
   );
-  const { data: cities, isLoading: citiesLoading } = useSWR<{ name: string }[]>(
+  const { data: cities, isLoading: citiesLoading } = useSWR<City[]>(
     optimisticFilters.region
       ? `/api/cities?region=${encodeURIComponent(optimisticFilters.region)}${
           optimisticFilters.country ? `&country=${encodeURIComponent(optimisticFilters.country)}` : ''

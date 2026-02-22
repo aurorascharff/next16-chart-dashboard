@@ -18,3 +18,19 @@ export type SalesData = {
   monthlyData: MonthlyData[];
   categoryData: CategoryData[];
 };
+
+export type Category = {
+  name: string;
+};
+export type Subcategory = {
+  name: string;
+};
+export type Region = {
+  name: string;
+};
+export type Country = {
+  name: string;
+};
+export type City = {
+  name: string;
+};
