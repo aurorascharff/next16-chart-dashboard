@@ -1,9 +1,9 @@
 import 'server-only';
 
 import { cache } from 'react';
+import { checkAuth } from '@/data/queries/user';
 import { MOCK_SALES, type MockSaleRecord } from '@/data/sales-data';
 import { CATEGORIES, REGIONS_DATA } from '@/data/sales-data';
-import { checkAuth } from '@/data/queries/user';
 import type {
   Category,
   CategoryData,

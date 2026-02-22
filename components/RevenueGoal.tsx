@@ -1,8 +1,8 @@
 import { Target } from 'lucide-react';
 import { saveRevenueGoal } from '@/data/actions/preferences';
 import { getRevenueGoal } from '@/data/queries/preferences';
-import { Skeleton } from './ui/skeleton';
 import { EditableText } from './design/EditableText';
+import { Skeleton } from './ui/skeleton';
 
 export async function RevenueGoal() {
   const goal = await getRevenueGoal();

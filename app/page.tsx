@@ -1,14 +1,14 @@
 import { Suspense } from 'react';
 import { ViewTransition } from 'react';
-import { RevenueGoal, RevenueGoalSkeleton } from '@/components/RevenueGoal';
 import { FilterPanel, FilterPanelSkeleton } from '@/components/FilterPanel';
+import { RevenueGoal, RevenueGoalSkeleton } from '@/components/RevenueGoal';
 import { SummaryCards, SummaryCardsSkeleton } from '@/components/SummaryCards';
 import { UserGreeting, UserGreetingSkeleton } from '@/components/UserGreeting';
 import { CategoryPieChart, CategoryChartSkeleton } from '@/components/charts/CategoryPieChart';
 import { RevenueBarChart, RevenueChartSkeleton } from '@/components/charts/RevenueBarChart';
 import { UnitsAreaChart, UnitsChartSkeleton } from '@/components/charts/UnitsAreaChart';
-import { getCategoryData, getMonthlyData } from '@/data/queries/sales';
 import { getRevenueGoal } from '@/data/queries/preferences';
+import { getCategoryData, getMonthlyData } from '@/data/queries/sales';
 import type { FilterValues } from '@/types/filters';
 
 export default function Page({ searchParams }: PageProps<'/'>) {

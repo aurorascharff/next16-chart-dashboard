@@ -50,14 +50,16 @@ export function EditableText({
         <>
           <div className="relative flex-1">
             {prefix && (
-              <span className="text-muted-foreground pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-sm">
+              <span className="text-muted-foreground pointer-events-none absolute top-1/2 left-2 -translate-y-1/2 text-sm">
                 {prefix}
               </span>
             )}
             <input
               type={type}
               value={draft}
-              onChange={e => setDraft(e.target.value)}
+              onChange={e => {
+                return setDraft(e.target.value);
+              }}
               onKeyDown={e => {
                 if (e.key === 'Enter') handleCommit();
                 if (e.key === 'Escape') handleCancel();

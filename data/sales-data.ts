@@ -78,36 +78,36 @@ function buildSeed(...parts: string[]) {
 // Each category has its own seasonal curve
 //                               Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov  Dec
 const CATEGORY_SEASONALITY: Record<string, number[]> = {
-  Electronics:    [0.6, 0.55, 0.7, 0.75, 0.8, 0.85, 0.8, 0.9, 1.0, 1.1, 1.6, 2.0],
-  Clothing:       [0.7, 0.65, 1.0, 1.2, 1.1, 0.9, 0.7, 0.8, 1.1, 1.2, 1.3, 1.1],
-  Food:           [0.9, 0.85, 0.9, 0.95, 1.0, 1.1, 1.15, 1.1, 1.0, 0.95, 1.05, 1.2],
-  'Home & Garden':[0.5, 0.5, 0.8, 1.1, 1.4, 1.3, 1.2, 1.1, 0.9, 0.7, 0.6, 0.55],
-  Sports:         [0.6, 0.65, 0.9, 1.1, 1.3, 1.5, 1.4, 1.2, 1.0, 0.8, 0.6, 0.55],
+  Clothing: [0.7, 0.65, 1.0, 1.2, 1.1, 0.9, 0.7, 0.8, 1.1, 1.2, 1.3, 1.1],
+  Electronics: [0.6, 0.55, 0.7, 0.75, 0.8, 0.85, 0.8, 0.9, 1.0, 1.1, 1.6, 2.0],
+  Food: [0.9, 0.85, 0.9, 0.95, 1.0, 1.1, 1.15, 1.1, 1.0, 0.95, 1.05, 1.2],
+  'Home & Garden': [0.5, 0.5, 0.8, 1.1, 1.4, 1.3, 1.2, 1.1, 0.9, 0.7, 0.6, 0.55],
+  Sports: [0.6, 0.65, 0.9, 1.1, 1.3, 1.5, 1.4, 1.2, 1.0, 0.8, 0.6, 0.55],
 };
 
 const CATEGORY_WEIGHT: Record<string, number> = {
-  Electronics: 2.5,
   Clothing: 1.4,
+  Electronics: 2.5,
+  Food: 0.7,
   'Home & Garden': 1.2,
   Sports: 1.0,
-  Food: 0.7,
 };
 
 const REGION_SCALE: Record<string, number> = {
-  'North America': 1.6,
-  Europe: 1.2,
   'Asia Pacific': 1.0,
+  Europe: 1.2,
+  'North America': 1.6,
 };
 
 const COUNTRY_SCALE: Record<string, number> = {
-  'United States': 1.8,
+  Australia: 0.7,
   Canada: 0.6,
-  'United Kingdom': 1.0,
-  Germany: 1.1,
   France: 0.9,
+  Germany: 1.1,
   Japan: 1.4,
   'South Korea': 0.8,
-  Australia: 0.7,
+  'United Kingdom': 1.0,
+  'United States': 1.8,
 };
 
 export const MOCK_SALES: MockSaleRecord[] = REGIONS_DATA.flatMap(region => {
