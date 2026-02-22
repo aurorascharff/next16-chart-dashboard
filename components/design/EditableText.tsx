@@ -72,7 +72,7 @@ export function EditableText({
               )}
             />
           </div>
-          <Button size="icon-xs" variant="ghost" onClick={handleCommit} aria-label="Save">
+          <Button className="ml-2" size="icon-xs" variant="ghost" onClick={handleCommit} aria-label="Save">
             <Check />
           </Button>
           <Button size="icon-xs" variant="ghost" onClick={handleCancel} aria-label="Cancel">

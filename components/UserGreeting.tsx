@@ -1,19 +1,29 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useLocalTime } from '@/hooks/use-local-time';
 import { useCurrentUser } from '@/providers/AuthProvider';
 
 export function UserGreeting() {
   const user = useCurrentUser();
-  const time = useLocalTime();
+  const greeting = useTimeOfDayGreeting();
 
   return (
     <p className="text-muted-foreground">
-      Welcome, {user?.name} — {user?.role} · {user?.branch}
-      {time && <span className="ml-2">· {time}</span>}
+      {greeting ?? 'Welcome'}, {user?.name} — {user?.role} · {user?.branch}
     </p>
   );
+}
+
+function useTimeOfDayGreeting() {
+  const [greeting, setGreeting] = useState<string | null>(null);
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting('Good morning');
+    else if (hour < 17) setGreeting('Good afternoon');
+    else setGreeting('Good evening');
+  }, []);
+  return greeting;
 }
 
 export function UserGreetingSkeleton() {
