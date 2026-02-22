@@ -21,6 +21,8 @@ type Props = {
 
 export function RevenueBarChart({ monthlyData, revenueGoal }: Props) {
   const data = use(monthlyData);
+  const maxRevenue = Math.max(...data.map(d => d.revenue));
+  const yMax = revenueGoal != null ? Math.max(maxRevenue, revenueGoal) * 1.1 : undefined;
   return (
     <Card>
       <CardHeader>
@@ -45,6 +47,7 @@ export function RevenueBarChart({ monthlyData, revenueGoal }: Props) {
             <YAxis
               tickLine={false}
               axisLine={false}
+              domain={yMax ? [0, yMax] : undefined}
               tickFormatter={v => {
                 return `$${(v / 1000).toFixed(0)}k`;
               }}

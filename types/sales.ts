@@ -14,11 +14,6 @@ export type SummaryData = {
   totalUnits: number;
 };
 
-export type SalesData = {
-  monthlyData: MonthlyData[];
-  categoryData: CategoryData[];
-};
-
 export type Category = {
   name: string;
 };
