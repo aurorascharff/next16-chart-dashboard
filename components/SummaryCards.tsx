@@ -2,14 +2,14 @@ import { DollarSign, Package, TrendingUp } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getSummaryData } from '@/data/queries/sales';
-import { filterCache } from '@/lib/searchParams';
+import type { FilterValues } from '@/types/filters';
 
 type Props = {
   searchParams: PageProps<'/'>['searchParams'];
 };
 
 export async function SummaryCards({ searchParams }: Props) {
-  const { category, city, country, region, subcategory } = await filterCache.parse(searchParams);
+  const { category, city, country, region, subcategory } = (await searchParams) as FilterValues;
   const summary = await getSummaryData({ category, city, country, region, subcategory });
 
   return (

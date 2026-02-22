@@ -48,18 +48,18 @@ type WrapperProps = {
 
 async function RevenueChartWrapper({ searchParams }: WrapperProps) {
   const { category, city, country, region, subcategory } = (await searchParams) as FilterValues;
-  const dataPromise = getMonthlyData({ category, city, country, region, subcategory });
-  return <RevenueBarChart dataPromise={dataPromise} />;
+  const monthlyDataPromise = getMonthlyData({ category, city, country, region, subcategory });
+  return <RevenueBarChart monthlyData={monthlyDataPromise} />;
 }
 
 async function UnitsChartWrapper({ searchParams }: WrapperProps) {
   const { category, city, country, region, subcategory } = (await searchParams) as FilterValues;
-  const dataPromise = getMonthlyData({ category, city, country, region, subcategory });
-  return <UnitsAreaChart dataPromise={dataPromise} />;
+  const monthlyDataPromise = getMonthlyData({ category, city, country, region, subcategory });
+  return <UnitsAreaChart monthlyData={monthlyDataPromise} />;
 }
 
 async function CategoryChartWrapper({ searchParams }: WrapperProps) {
   const { category, city, country, region, subcategory } = (await searchParams) as FilterValues;
-  const dataPromise = getCategoryData({ category, city, country, region, subcategory });
-  return <CategoryPieChart dataPromise={dataPromise} />;
+  const categoryDataPromise = getCategoryData({ category, city, country, region, subcategory });
+  return <CategoryPieChart categoryData={categoryDataPromise} />;
 }

@@ -4,6 +4,7 @@ import { cache } from 'react';
 import { MOCK_SALES, type MockSaleRecord } from '@/data/mock/sales-data';
 import { CATEGORIES, REGIONS_DATA } from '@/data/mock/sales-data';
 import { checkAuth } from '@/data/queries/user';
+import type { CategoryData, MonthlyData, SummaryData } from '@/types/sales';
 import { slow } from '@/utils/slow';
 
 type SalesFilters = {
@@ -30,7 +31,7 @@ export const getMonthlyData = cache(async (filters: SalesFilters) => {
   return getMonthlyDataCached(filters);
 });
 
-async function getMonthlyDataCached(filters: SalesFilters) {
+async function getMonthlyDataCached(filters: SalesFilters): Promise<MonthlyData[]> {
   // 'use cache: remote';
   // cacheLife('hours');
 
@@ -59,7 +60,7 @@ export const getCategoryData = cache(async (filters: SalesFilters) => {
   return getCategoryDataCached(filters);
 });
 
-async function getCategoryDataCached(filters: SalesFilters) {
+async function getCategoryDataCached(filters: SalesFilters): Promise<CategoryData[]> {
   // 'use cache: remote';
   // cacheLife('hours');
 
@@ -85,7 +86,7 @@ export const getSummaryData = cache(async (filters: SalesFilters) => {
   return getSummaryDataCached(filters);
 });
 
-async function getSummaryDataCached(filters: SalesFilters) {
+async function getSummaryDataCached(filters: SalesFilters): Promise<SummaryData> {
   // 'use cache: remote';
   // cacheLife('hours');
 

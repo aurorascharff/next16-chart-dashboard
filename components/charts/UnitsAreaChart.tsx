@@ -4,6 +4,7 @@ import { use } from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import type { MonthlyData } from '@/types/sales';
 import { Skeleton } from '../ui/skeleton';
 
 const chartConfig = {
@@ -14,11 +15,11 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 type Props = {
-  dataPromise: Promise<{ month: string; units: number }[]>;
+  monthlyData: Promise<MonthlyData[]>;
 };
 
-export function UnitsAreaChart({ dataPromise }: Props) {
-  const data = use(dataPromise);
+export function UnitsAreaChart({ monthlyData }: Props) {
+  const data = use(monthlyData);
   return (
     <Card>
       <CardHeader>

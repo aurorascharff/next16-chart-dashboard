@@ -11,6 +11,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import type { CategoryData } from '@/types/sales';
 import { Skeleton } from '../ui/skeleton';
 
 const chartConfig = {
@@ -22,11 +23,11 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 type Props = {
-  dataPromise: Promise<{ category: string; revenue: number }[]>;
+  categoryData: Promise<CategoryData[]>;
 };
 
-export function CategoryPieChart({ dataPromise }: Props) {
-  const data = use(dataPromise);
+export function CategoryPieChart({ categoryData }: Props) {
+  const data = use(categoryData);
   return (
     <Card>
       <CardHeader>
