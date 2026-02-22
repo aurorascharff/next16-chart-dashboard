@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCurrentUser } from '@/providers/AuthProvider';
 
@@ -10,20 +10,26 @@ export function UserGreeting() {
 
   return (
     <p className="text-muted-foreground">
-      {greeting ?? 'Welcome'}, {user?.name} — {user?.role} · {user?.branch}
+      {greeting}, {user?.name} — {user?.role} · {user?.branch}
     </p>
   );
 }
 
+const noop = () => {
+  return () => {};
+};
+
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning';
+  if (hour < 17) return 'Good afternoon';
+  return 'Good evening';
+}
+
 function useTimeOfDayGreeting() {
-  const [greeting, setGreeting] = useState<string | null>(null);
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting('Good morning');
-    else if (hour < 17) setGreeting('Good afternoon');
-    else setGreeting('Good evening');
-  }, []);
-  return greeting;
+  return useSyncExternalStore(noop, getGreeting, () => {
+    return 'Welcome';
+  });
 }
 
 export function UserGreetingSkeleton() {
