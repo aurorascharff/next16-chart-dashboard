@@ -8,8 +8,8 @@ import { CategoryPieChart, CategoryChartSkeleton } from '@/components/charts/Cat
 import { RevenueBarChart, RevenueChartSkeleton } from '@/components/charts/RevenueBarChart';
 import { UnitsAreaChart, UnitsChartSkeleton } from '@/components/charts/UnitsAreaChart';
 import { getCategoryData, getMonthlyData } from '@/data/queries/sales';
+import { getRevenueGoal } from '@/data/queries/preferences';
 import type { FilterValues } from '@/types/filters';
-import { cookies } from 'next/headers';
 
 export default function Page({ searchParams }: PageProps<'/'>) {
   return (
@@ -74,9 +74,8 @@ type WrapperProps = {
 async function RevenueChartWrapper({ searchParams }: WrapperProps) {
   const { category, city, country, region, subcategory } = (await searchParams) as FilterValues;
   const monthlyDataPromise = getMonthlyData({ category, city, country, region, subcategory });
-  const cookieStore = await cookies();
-  const raw = cookieStore.get('revenue-goal')?.value;
-  const revenueGoal = raw ? Number(raw) : null;
+  const hasFilters = !!(category || city || country || region || subcategory);
+  const revenueGoal = hasFilters ? null : await getRevenueGoal();
   return <RevenueBarChart monthlyData={monthlyDataPromise} revenueGoal={revenueGoal} />;
 }
 

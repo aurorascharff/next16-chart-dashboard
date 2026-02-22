@@ -1,19 +1,19 @@
 import { Target } from 'lucide-react';
-import { cookies } from 'next/headers';
-import { saveGoal } from '@/data/actions/goal';
+import { saveRevenueGoal } from '@/data/actions/preferences';
+import { getRevenueGoal } from '@/data/queries/preferences';
 import { Skeleton } from './ui/skeleton';
 import { EditableText } from './design/EditableText';
 
 export async function RevenueGoal() {
-  const cookieStore = await cookies();
-  const goal = cookieStore.get('revenue-goal')?.value ?? '';
+  const goal = await getRevenueGoal();
+  const goalStr = goal?.toString() ?? '';
   return (
     <div className="flex items-center gap-2">
       <Target className="text-muted-foreground size-4 shrink-0" />
       <span className="text-sm font-medium whitespace-nowrap">Monthly Revenue Goal</span>
       <EditableText
-        value={goal}
-        action={saveGoal}
+        value={goalStr}
+        action={saveRevenueGoal}
         prefix="$"
         type="number"
         placeholder="Set a target..."

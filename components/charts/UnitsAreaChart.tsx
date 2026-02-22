@@ -65,7 +65,7 @@ export function UnitsChartSkeleton() {
         <Skeleton className="h-4 w-56" />
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-[305px] w-full" />
+        <Skeleton className="h-[330px] w-full" />
       </CardContent>
     </Card>
   );

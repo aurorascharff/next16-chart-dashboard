@@ -52,7 +52,7 @@ export function RevenueBarChart({ monthlyData, revenueGoal }: Props) {
             <ChartTooltip
               content={
                 <ChartTooltipContent
-                  nameKey="category"
+                  nameKey="revenue"
                   formatter={value => {
                     return new Intl.NumberFormat('en-US', {
                       currency: 'USD',
@@ -67,20 +67,21 @@ export function RevenueBarChart({ monthlyData, revenueGoal }: Props) {
             {revenueGoal != null && (
               <ReferenceLine
                 y={revenueGoal}
-                stroke="var(--chart-2)"
-                strokeDasharray="6 4"
-                strokeWidth={1.5}
-                label={{
-                  value: `Goal: $${(revenueGoal / 1000).toFixed(0)}k`,
-                  position: 'insideTopRight',
-                  fill: 'var(--chart-2)',
-                  fontSize: 11,
-                  fontWeight: 500,
-                }}
+                stroke="oklch(0.3 0.05 260)"
+                strokeDasharray="8 4"
+                strokeWidth={2}
               />
             )}
           </BarChart>
         </ChartContainer>
+        {revenueGoal != null && (
+          <div className="text-muted-foreground mt-3 flex items-center gap-2 text-xs">
+            <svg width="16" height="2" aria-hidden="true">
+              <line x1="0" y1="1" x2="16" y2="1" stroke="oklch(0.3 0.05 260)" strokeWidth="2" strokeDasharray="4 2" />
+            </svg>
+            Goal: {new Intl.NumberFormat('en-US', { currency: 'USD', maximumFractionDigits: 0, style: 'currency' }).format(revenueGoal)}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
@@ -94,7 +95,7 @@ export function RevenueChartSkeleton() {
         <Skeleton className="h-4 w-56" />
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-[305px] w-full" />
+        <Skeleton className="h-[330px] w-full" />
       </CardContent>
     </Card>
   );
