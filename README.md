@@ -37,7 +37,7 @@ Every page folder should contain everything it needs. Components and functions l
 
 ## Key Patterns
 
-**Cache Components & static shell:** Uses [`cacheComponents: true`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents) for static shell rendering and [`"use cache"`](https://nextjs.org/docs/app/api-reference/directives/use-cache) for explicit caching. Keep pages non-async — push dynamic data access into Suspense boundaries as deep as possible.
+**Cache Components:** Uses [`cacheComponents: true`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents) for static shell rendering and [`"use cache"`](https://nextjs.org/docs/app/api-reference/directives/use-cache) for explicit caching. Keep pages non-async — push dynamic data access into Suspense boundaries as deep as possible.
 
 **Async React:** Replace manual `isLoading`/`isError` state with React 19's coordination primitives — `useTransition` for tracking async work, `useOptimistic` for instant feedback, `Suspense` for loading boundaries, and `use()` for reading promises during render. See `AGENTS.md` for detailed patterns and examples.
 
