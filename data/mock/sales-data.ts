@@ -58,34 +58,31 @@ export type MockSaleRecord = {
   category: string;
 };
 
+function hash(str: string) {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) {
+    h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+  }
+  return h >>> 0;
+}
+
 function seededRandom(seed: number) {
-  // Simple deterministic pseudo-random so data is stable across runs
-  const x = Math.sin(seed) * 10000;
+  const x = Math.sin(seed * 9301 + 49297) * 233280;
   return x - Math.floor(x);
 }
 
 function buildSeed(...parts: string[]) {
-  return parts
-    .join('|')
-    .split('')
-    .reduce((acc, c) => {
-      return acc + c.charCodeAt(0);
-    }, 0);
+  return hash(parts.join('|'));
 }
 
-const SEASONALITY: Record<string, number> = {
-  '2025-01': 0.7,
-  '2025-02': 0.65,
-  '2025-03': 0.8,
-  '2025-04': 0.85,
-  '2025-05': 0.95,
-  '2025-06': 1.05,
-  '2025-07': 1.0,
-  '2025-08': 0.9,
-  '2025-09': 1.1,
-  '2025-10': 1.15,
-  '2025-11': 1.4,
-  '2025-12': 1.6,
+// Each category has its own seasonal curve
+//                               Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov  Dec
+const CATEGORY_SEASONALITY: Record<string, number[]> = {
+  Electronics:    [0.6, 0.55, 0.7, 0.75, 0.8, 0.85, 0.8, 0.9, 1.0, 1.1, 1.6, 2.0],
+  Clothing:       [0.7, 0.65, 1.0, 1.2, 1.1, 0.9, 0.7, 0.8, 1.1, 1.2, 1.3, 1.1],
+  Food:           [0.9, 0.85, 0.9, 0.95, 1.0, 1.1, 1.15, 1.1, 1.0, 0.95, 1.05, 1.2],
+  'Home & Garden':[0.5, 0.5, 0.8, 1.1, 1.4, 1.3, 1.2, 1.1, 0.9, 0.7, 0.6, 0.55],
+  Sports:         [0.6, 0.65, 0.9, 1.1, 1.3, 1.5, 1.4, 1.2, 1.0, 0.8, 0.6, 0.55],
 };
 
 const CATEGORY_WEIGHT: Record<string, number> = {
@@ -102,6 +99,17 @@ const REGION_SCALE: Record<string, number> = {
   'Asia Pacific': 1.0,
 };
 
+const COUNTRY_SCALE: Record<string, number> = {
+  'United States': 1.8,
+  Canada: 0.6,
+  'United Kingdom': 1.0,
+  Germany: 1.1,
+  France: 0.9,
+  Japan: 1.4,
+  'South Korea': 0.8,
+  Australia: 0.7,
+};
+
 export const MOCK_SALES: MockSaleRecord[] = REGIONS_DATA.flatMap(region => {
   return region.countries.flatMap(country => {
     return country.cities.flatMap(city => {
@@ -111,13 +119,16 @@ export const MOCK_SALES: MockSaleRecord[] = REGIONS_DATA.flatMap(region => {
             const seed = buildSeed(region.name, country.name, city, cat.name, subcategory, month);
             const monthIndex = parseInt(month.split('-')[1], 10);
             const trend = 1 + (monthIndex - 1) * 0.03;
-            const season = SEASONALITY[month] ?? 1;
+            const season = CATEGORY_SEASONALITY[cat.name]?.[monthIndex - 1] ?? 1;
             const catWeight = CATEGORY_WEIGHT[cat.name] ?? 1;
             const regionScale = REGION_SCALE[region.name] ?? 1;
-            const base = 2000 + seededRandom(seed) * 8000;
-            const revenue = base * season * catWeight * regionScale * trend;
-            const unitBase = 20 + seededRandom(seed + 1) * 80;
-            const units = unitBase * season * trend;
+            const countryScale = COUNTRY_SCALE[country.name] ?? 1;
+            const cityJitter = 0.7 + seededRandom(hash(city)) * 0.6;
+            const subJitter = 0.6 + seededRandom(hash(subcategory + cat.name)) * 0.8;
+            const base = 1500 + seededRandom(seed) * 10000;
+            const revenue = base * season * catWeight * regionScale * countryScale * cityJitter * subJitter * trend;
+            const unitBase = 15 + seededRandom(seed + 1) * 90;
+            const units = unitBase * season * countryScale * cityJitter * trend;
             return {
               category: cat.name,
               city,

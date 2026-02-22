@@ -49,6 +49,7 @@ function SheetContent({
     <SheetPortal>
       <SheetOverlay />
       <SheetPrimitive.Popup
+        style={{ viewTransitionName: 'anything' }}
         data-slot="sheet-content"
         data-side={side}
         className={cn(
