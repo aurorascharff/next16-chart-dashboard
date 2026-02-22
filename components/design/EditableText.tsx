@@ -28,7 +28,7 @@ export function EditableText({
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState(value);
 
-  function commitAction() {
+  function handleCommit() {
     setIsEditing(false);
     if (draft === optimisticValue) return;
     startTransition(async () => {
@@ -37,7 +37,7 @@ export function EditableText({
     });
   }
 
-  function cancelAction() {
+  function handleCancel() {
     setDraft(optimisticValue);
     setIsEditing(false);
   }
@@ -59,8 +59,8 @@ export function EditableText({
               value={draft}
               onChange={e => setDraft(e.target.value)}
               onKeyDown={e => {
-                if (e.key === 'Enter') commitAction();
-                if (e.key === 'Escape') cancelAction();
+                if (e.key === 'Enter') handleCommit();
+                if (e.key === 'Escape') handleCancel();
               }}
               placeholder={placeholder}
               autoFocus
@@ -72,10 +72,10 @@ export function EditableText({
               )}
             />
           </div>
-          <Button size="icon-xs" variant="ghost" onClick={commitAction} aria-label="Save">
+          <Button size="icon-xs" variant="ghost" onClick={handleCommit} aria-label="Save">
             <Check />
           </Button>
-          <Button size="icon-xs" variant="ghost" onClick={cancelAction} aria-label="Cancel">
+          <Button size="icon-xs" variant="ghost" onClick={handleCancel} aria-label="Cancel">
             <X />
           </Button>
         </>
