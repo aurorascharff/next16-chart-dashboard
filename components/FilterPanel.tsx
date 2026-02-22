@@ -186,8 +186,8 @@ export function FilterPanel() {
 export function FilterPanelSkeleton() {
   return (
     <Button variant="outline" className="gap-2">
-      <Skeleton className="size-4" />
-      <Skeleton className="hidden h-4 w-16 sm:block" />
+      <Skeleton className="height-4" />
+      <Skeleton className="hidden h-4 w-12 sm:block" />
     </Button>
   );
 }
