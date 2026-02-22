@@ -4,6 +4,7 @@ import { Check, Pencil, X } from 'lucide-react';
 import { useOptimistic, useState, useTransition } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 import { Spinner } from '../ui/spinner';
 
 type EditableTextProps = Omit<React.ComponentProps<'input'>, 'value' | 'action'> & {
@@ -55,7 +56,7 @@ export function EditableText({
                 {prefix}
               </span>
             )}
-            <input
+            <Input
               {...inputProps}
               value={draft}
               onChange={e => {
@@ -67,12 +68,7 @@ export function EditableText({
               }}
               placeholder={placeholder}
               autoFocus
-              className={cn(
-                'dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50',
-                'h-8 w-full min-w-0 rounded-md border bg-transparent px-2.5 py-1 text-sm shadow-xs',
-                'transition-[color,box-shadow] outline-none focus-visible:ring-[3px]',
-                prefix && 'pl-6',
-              )}
+              className={cn('h-8 text-sm', prefix && 'pl-6')}
             />
           </div>
           <Button className="ml-2" size="icon-xs" variant="ghost" onClick={handleCommit} aria-label="Save">
