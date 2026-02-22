@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { ViewTransition } from 'react';
+import { RevenueGoal, RevenueGoalSkeleton } from '@/components/RevenueGoal';
 import { FilterPanel, FilterPanelSkeleton } from '@/components/FilterPanel';
 import { SummaryCards, SummaryCardsSkeleton } from '@/components/SummaryCards';
 import { UserGreeting, UserGreetingSkeleton } from '@/components/UserGreeting';
@@ -8,6 +9,7 @@ import { RevenueBarChart, RevenueChartSkeleton } from '@/components/charts/Reven
 import { UnitsAreaChart, UnitsChartSkeleton } from '@/components/charts/UnitsAreaChart';
 import { getCategoryData, getMonthlyData } from '@/data/queries/sales';
 import type { FilterValues } from '@/types/filters';
+import { cookies } from 'next/headers';
 
 export default function Page({ searchParams }: PageProps<'/'>) {
   return (
@@ -28,6 +30,9 @@ export default function Page({ searchParams }: PageProps<'/'>) {
         <ViewTransition enter="slide-up">
           <UserGreeting />
         </ViewTransition>
+      </Suspense>
+      <Suspense fallback={<RevenueGoalSkeleton />}>
+        <RevenueGoal />
       </Suspense>
       <div className="flex flex-col gap-6 group-has-data-pending:animate-pulse">
         <Suspense fallback={<SummaryCardsSkeleton />}>
@@ -69,7 +74,10 @@ type WrapperProps = {
 async function RevenueChartWrapper({ searchParams }: WrapperProps) {
   const { category, city, country, region, subcategory } = (await searchParams) as FilterValues;
   const monthlyDataPromise = getMonthlyData({ category, city, country, region, subcategory });
-  return <RevenueBarChart monthlyData={monthlyDataPromise} />;
+  const cookieStore = await cookies();
+  const raw = cookieStore.get('revenue-goal')?.value;
+  const revenueGoal = raw ? Number(raw) : null;
+  return <RevenueBarChart monthlyData={monthlyDataPromise} revenueGoal={revenueGoal} />;
 }
 
 async function UnitsChartWrapper({ searchParams }: WrapperProps) {

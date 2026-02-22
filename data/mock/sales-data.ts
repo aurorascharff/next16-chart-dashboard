@@ -73,6 +73,35 @@ function buildSeed(...parts: string[]) {
     }, 0);
 }
 
+const SEASONALITY: Record<string, number> = {
+  '2025-01': 0.7,
+  '2025-02': 0.65,
+  '2025-03': 0.8,
+  '2025-04': 0.85,
+  '2025-05': 0.95,
+  '2025-06': 1.05,
+  '2025-07': 1.0,
+  '2025-08': 0.9,
+  '2025-09': 1.1,
+  '2025-10': 1.15,
+  '2025-11': 1.4,
+  '2025-12': 1.6,
+};
+
+const CATEGORY_WEIGHT: Record<string, number> = {
+  Electronics: 2.5,
+  Clothing: 1.4,
+  'Home & Garden': 1.2,
+  Sports: 1.0,
+  Food: 0.7,
+};
+
+const REGION_SCALE: Record<string, number> = {
+  'North America': 1.6,
+  Europe: 1.2,
+  'Asia Pacific': 1.0,
+};
+
 export const MOCK_SALES: MockSaleRecord[] = REGIONS_DATA.flatMap(region => {
   return region.countries.flatMap(country => {
     return country.cities.flatMap(city => {
@@ -80,15 +109,24 @@ export const MOCK_SALES: MockSaleRecord[] = REGIONS_DATA.flatMap(region => {
         return cat.subcategories.flatMap(subcategory => {
           return MONTHS.map(month => {
             const seed = buildSeed(region.name, country.name, city, cat.name, subcategory, month);
+            const monthIndex = parseInt(month.split('-')[1], 10);
+            const trend = 1 + (monthIndex - 1) * 0.03;
+            const season = SEASONALITY[month] ?? 1;
+            const catWeight = CATEGORY_WEIGHT[cat.name] ?? 1;
+            const regionScale = REGION_SCALE[region.name] ?? 1;
+            const base = 2000 + seededRandom(seed) * 8000;
+            const revenue = base * season * catWeight * regionScale * trend;
+            const unitBase = 20 + seededRandom(seed + 1) * 80;
+            const units = unitBase * season * trend;
             return {
               category: cat.name,
               city,
               country: country.name,
               month,
               region: region.name,
-              revenue: Math.round((5000 + seededRandom(seed) * 5000) * 100) / 100,
+              revenue: Math.round(revenue * 100) / 100,
               subcategory,
-              units: Math.floor(50 + seededRandom(seed + 1) * 50),
+              units: Math.floor(units),
             };
           });
         });

@@ -1,7 +1,7 @@
 'use client';
 
 import { use } from 'react';
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import type { MonthlyData } from '@/types/sales';
@@ -16,9 +16,10 @@ const chartConfig = {
 
 type Props = {
   monthlyData: Promise<MonthlyData[]>;
+  revenueGoal?: number | null;
 };
 
-export function RevenueBarChart({ monthlyData }: Props) {
+export function RevenueBarChart({ monthlyData, revenueGoal }: Props) {
   const data = use(monthlyData);
   return (
     <Card>
@@ -63,6 +64,21 @@ export function RevenueBarChart({ monthlyData }: Props) {
               }
             />
             <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} />
+            {revenueGoal != null && (
+              <ReferenceLine
+                y={revenueGoal}
+                stroke="var(--chart-2)"
+                strokeDasharray="6 4"
+                strokeWidth={1.5}
+                label={{
+                  value: `Goal: $${(revenueGoal / 1000).toFixed(0)}k`,
+                  position: 'insideTopRight',
+                  fill: 'var(--chart-2)',
+                  fontSize: 11,
+                  fontWeight: 500,
+                }}
+              />
+            )}
           </BarChart>
         </ChartContainer>
       </CardContent>
