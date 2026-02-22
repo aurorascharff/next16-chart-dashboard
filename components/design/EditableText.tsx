@@ -87,6 +87,7 @@ export function EditableText({
           <Button
             size="icon-xs"
             variant="ghost"
+            className="transition-colors"
             onClick={() => {
               setDraft(optimisticValue);
               setIsEditing(true);
