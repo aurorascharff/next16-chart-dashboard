@@ -11,7 +11,7 @@ bun install
 bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost.3000) in your browser.
 
 ## Project Structure
 
@@ -37,7 +37,7 @@ Every page folder should contain everything it needs. Components and functions l
 
 ## Key Patterns
 
-**Cache Components:** Uses [`cacheComponents: true`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents) for static shell rendering and [`"use cache"`](https://nextjs.org/docs/app/api-reference/directives/use-cache) for explicit caching. Keep pages non-async — push dynamic data access into Suspense boundaries as deep as possible.
+**Cache Components:** Uses [`cacheComponents: true`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents) statically renders server components that don't access dynamic data. Keep pages non-async and push dynamic data access into `<Suspense>` boundaries to maximize the static shell. Use [`"use cache"`](https://nextjs.org/docs/app/api-reference/directives/use-cache) with `cacheLife()` to explicitly cache additional components or functions.
 
 **Async React:** Replace manual `isLoading`/`isError` state with React 19's coordination primitives — `useTransition` for tracking async work, `useOptimistic` for instant feedback, `Suspense` for loading boundaries, and `use()` for reading promises during render. See `AGENTS.md` for detailed patterns and examples.
 
