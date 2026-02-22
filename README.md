@@ -1,6 +1,6 @@
 # Next 16 Chart Dashboard
 
-A sales dashboard exploring Async React and dynamic data fetching with Next.js 16's Cache Components. Features cascading filters (Region → Country + City in parallel, Category → Subcategory), streaming, URL-driven filter state, and optimistic updates with pending UI. Built with React 19, TailwindCSS v4, and shadcn/ui (Base UI).
+A sales dashboard exploring Async React and dynamic data fetching with Next.js 16's Cache Components. Features cascading filters (Region → Country + City in parallel, Category → Subcategory), streaming, URL-driven filter state, and optimistic updates with pending UI.
 
 Built with Next.js 16, React 19, TailwindCSS v4, and shadcn/ui (Base UI).
 
@@ -29,20 +29,25 @@ lib/
 ```
 
 - **components/ui** — [shadcn/ui](https://ui.shadcn.com/) components. Add with `bunx shadcn@latest add <component-name>`
-- **components/design** — Components that expose [Action props](https://react.dev/reference/react/useTransition#exposing-action-props-from-components) and handle optimistic state and loading internally via `useOptimistic` + `useTransition`
+- **components/design** — Components that expose [Action props](https://react.dev/reference/react/useTransition#exposing-action-props-from-components) and handle async coordination internally
 
 Every page folder should contain everything it needs. Components and functions live at the nearest shared space in the hierarchy.
 
-**Naming:** PascalCase for components, kebab-case for files/folders, camelCase for functions/hooks.
+**Naming:** PascalCase for components, kebab-case for files/folders, camelCase for functions/hooks. Suffix transition-based functions with "Action".
+
+## Key Patterns
+
+**Cache Components & static shell:** Uses [`cacheComponents: true`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents) for static shell rendering and [`"use cache"`](https://nextjs.org/docs/app/api-reference/directives/use-cache) for explicit caching. Keep pages non-async — push dynamic data access into Suspense boundaries as deep as possible.
+
+**Async React:** Replace manual `isLoading`/`isError` state with React 19's coordination primitives — `useTransition` for tracking async work, `useOptimistic` for instant feedback, `Suspense` for loading boundaries, and `use()` for reading promises during render. See `AGENTS.md` for detailed patterns and examples.
 
 ## Development Flow
 
-This project uses [Cache Components](https://nextjs.org/docs/app/getting-started/cache-components) ([`cacheComponents: true`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents)) — data fetching is **dynamic by default**, and routes are prerendered into a static HTML shell with dynamic content streaming in via `<Suspense>`. Push dynamic data access (`searchParams`, `cookies()`, `headers()`, uncached fetches) as deep as possible in the component tree to maximize the static shell.
-
-- **Fetching data** — Create queries in `data/queries/`, call in Server Components. Wrap with `cache()` for deduplication. Client components use SWR for dependent or interactive fetches.
-- **Mutating data** — Create Server Actions in `data/actions/` with `"use server"`. Invalidate with `updateTag()` or `revalidateTag()`. Use `useTransition` or `useFormStatus` for pending states, `useOptimistic` for instant feedback.
-- **Navigation** — Wrap state changes in `useTransition` to keep old content visible while loading.
-- **Caching** — Add [`"use cache"`](https://nextjs.org/docs/app/api-reference/directives/use-cache) with [`cacheLife()`](https://nextjs.org/docs/app/api-reference/functions/cacheLife) to pages, components, or functions you want included in the static shell or cached across requests.
+- **Fetching data** — Queries in `data/queries/`, wrapped with `cache()`. Await in Server Components directly, or pass the promise to a client component and unwrap with `use()`. Use SWR with `lib/fetcher.ts` for dependent or interactive client-side fetches (e.g. cascading filter options).
+- **Mutating data** — Server Actions in `data/actions/` with `"use server"`. Invalidate with `revalidateTag()`. Use `useTransition` + `useOptimistic` for pending state and instant feedback.
+- **Navigation** — Wrap route changes in `useTransition` to get `isPending` for loading UI.
+- **Caching** — Add `"use cache"` with `cacheLife()` to pages, components, or functions to include them in the static shell.
+- **Errors** — `error.tsx` for boundaries, `not-found.tsx` + `notFound()` for 404s. Errors thrown inside transitions automatically reach the nearest error boundary.
 
 ## Development Tools
 
@@ -54,6 +59,6 @@ Uses [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) with for
 bun run build
 ```
 
-Deploy to [Vercel](https://vercel.com) for the easiest experience. Use a production database instead of SQLite.
+Deploy to [Vercel](https://vercel.com) for the easiest experience.
 
 See the [Next.js deployment docs](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
