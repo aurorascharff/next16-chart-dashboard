@@ -2,6 +2,7 @@
 
 import { useOptimistic, useTransition } from 'react';
 import { Select as ShadcnSelect, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Spinner } from '../ui/spinner';
 
 type Option = { name: string };
 
@@ -11,7 +12,6 @@ type SelectProps = {
   options: Option[] | undefined;
   isLoading?: boolean;
   disabled?: boolean;
-  disabledPlaceholder?: string;
   placeholder?: string;
   action: (value: string | null) => void | Promise<void>;
 };
@@ -22,16 +22,12 @@ export function Select({
   options,
   isLoading = false,
   disabled = false,
-  disabledPlaceholder,
   placeholder = `Select ${label.toLowerCase()}`,
   action,
 }: SelectProps) {
   const [, startTransition] = useTransition();
   const [optimisticValue, setOptimisticValue] = useOptimistic(value);
   const isDisabled = disabled || isLoading;
-
-  const resolvedPlaceholder =
-    disabled && disabledPlaceholder ? disabledPlaceholder : isLoading ? 'Loading...' : placeholder;
 
   async function handleChange(next: string | null) {
     startTransition(async () => {
@@ -45,7 +41,8 @@ export function Select({
       <label className="text-sm font-medium">{label}</label>
       <ShadcnSelect value={optimisticValue ?? ''} onValueChange={handleChange} disabled={isDisabled}>
         <SelectTrigger className="w-full" disabled={isDisabled}>
-          <SelectValue placeholder={resolvedPlaceholder} />
+          <SelectValue placeholder={placeholder} />
+          {isLoading && <Spinner />}
         </SelectTrigger>
         <SelectContent>
           {options?.map(o => {
