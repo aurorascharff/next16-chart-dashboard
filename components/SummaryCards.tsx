@@ -58,7 +58,7 @@ export function SummaryCardsSkeleton() {
               <Skeleton className="size-4" />
             </CardHeader>
             <CardContent>
-              <Skeleton className="h-8 w-32" />
+              <Skeleton className="h-7 w-32" />
             </CardContent>
           </Card>
         );

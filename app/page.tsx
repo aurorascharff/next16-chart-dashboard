@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { ViewTransition } from 'react';
 import { FilterPanel, FilterPanelSkeleton } from '@/components/FilterPanel';
 import { SummaryCards, SummaryCardsSkeleton } from '@/components/SummaryCards';
 import { UserGreeting, UserGreetingSkeleton } from '@/components/UserGreeting';
@@ -17,25 +18,44 @@ export default function Page({ searchParams }: PageProps<'/'>) {
           <FilterPanel />
         </Suspense>
       </div>
-      <Suspense fallback={<UserGreetingSkeleton />}>
-        <UserGreeting />
+      <Suspense
+        fallback={
+          <ViewTransition enter="slide-down">
+            <UserGreetingSkeleton />
+          </ViewTransition>
+        }
+      >
+        <ViewTransition enter="slide-up">
+          <UserGreeting />
+        </ViewTransition>
       </Suspense>
       <div className="flex flex-col gap-6 group-has-data-pending:animate-pulse">
         <Suspense fallback={<SummaryCardsSkeleton />}>
-          <SummaryCards searchParams={searchParams} />
+          <ViewTransition>
+            <SummaryCards searchParams={searchParams} />
+          </ViewTransition>
         </Suspense>
         <h2 className="text-lg font-semibold tracking-tight">Monthly Trends</h2>
         <div className="grid gap-6 lg:grid-cols-2">
-          <Suspense fallback={<RevenueChartSkeleton />}>
-            <RevenueChartWrapper searchParams={searchParams} />
-          </Suspense>
-          <Suspense fallback={<UnitsChartSkeleton />}>
-            <UnitsChartWrapper searchParams={searchParams} />
+          <Suspense
+            fallback={
+              <>
+                <RevenueChartSkeleton />
+                <UnitsChartSkeleton />
+              </>
+            }
+          >
+            <ViewTransition>
+              <RevenueChartWrapper searchParams={searchParams} />
+              <UnitsChartWrapper searchParams={searchParams} />
+            </ViewTransition>
           </Suspense>
         </div>
         <h2 className="text-lg font-semibold tracking-tight">Breakdown</h2>
         <Suspense fallback={<CategoryChartSkeleton />}>
-          <CategoryChartWrapper searchParams={searchParams} />
+          <ViewTransition>
+            <CategoryChartWrapper searchParams={searchParams} />
+          </ViewTransition>
         </Suspense>
       </div>
     </div>

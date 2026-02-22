@@ -113,7 +113,6 @@ export function FilterPanel() {
                 options={countries}
                 isLoading={countriesLoading}
                 disabled={!optimisticFilters.region}
-                disabledPlaceholder="Select a region first"
                 action={value => {
                   applyFiltersAction({ city: null, country: value });
                 }}
@@ -124,7 +123,6 @@ export function FilterPanel() {
                 options={cities}
                 isLoading={citiesLoading}
                 disabled={!optimisticFilters.region}
-                disabledPlaceholder="Select a region first"
                 action={value => {
                   applyFiltersAction({ city: value });
                 }}
@@ -148,7 +146,6 @@ export function FilterPanel() {
                 options={subcategories}
                 isLoading={subcategoriesLoading}
                 disabled={!optimisticFilters.category}
-                disabledPlaceholder="Select a category first"
                 action={value => {
                   applyFiltersAction({ subcategory: value });
                 }}
