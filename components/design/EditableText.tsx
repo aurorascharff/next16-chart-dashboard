@@ -80,21 +80,19 @@ export function EditableText({
         </>
       ) : (
         <>
-          <p className={cn('text-sm', !displayValue && 'text-muted-foreground italic')}>
-            {displayValue || placeholder}
-          </p>
-          <Button
-            size="icon-xs"
-            variant="ghost"
-            className="transition-colors"
+          <button
+            type="button"
+            className="hover:bg-muted flex h-8 cursor-pointer items-center gap-1 rounded-md px-2 transition-colors"
             onClick={() => {
               setDraft(optimisticValue);
               setIsEditing(true);
             }}
-            aria-label="Edit"
           >
-            <Pencil />
-          </Button>
+            <span className={cn('text-sm', !displayValue && 'text-muted-foreground italic')}>
+              {displayValue || placeholder}
+            </span>
+            <Pencil className="text-muted-foreground size-3 shrink-0" />
+          </button>
           {isPending && <Spinner className="size-3" />}
         </>
       )}
