@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 const THEMES = { dark: '.dark', light: '' } as const;
 
 export type ChartConfig = {
+  // eslint-disable-next-line autofix/no-unused-vars
   [k in string]: {
     label?: React.ReactNode;
     icon?: React.ComponentType;
