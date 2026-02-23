@@ -45,7 +45,9 @@ export function EditableText({
   }
 
   const displayValue = optimisticValue
-    ? (renderDisplay ? renderDisplay(optimisticValue) : `${prefix ?? ''}${optimisticValue}`)
+    ? renderDisplay
+      ? renderDisplay(optimisticValue)
+      : `${prefix ?? ''}${optimisticValue}`
     : null;
 
   return (
