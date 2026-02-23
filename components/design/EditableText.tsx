@@ -32,7 +32,7 @@ export function EditableText({
 
   function handleCommit() {
     setIsEditing(false);
-    if (draft === optimisticValue) return;
+    if (draft.trim() === optimisticValue) return;
     onChange?.(draft);
     startTransition(async () => {
       setOptimisticValue(draft);
@@ -45,11 +45,12 @@ export function EditableText({
     setIsEditing(false);
   }
 
-  const resolvedDisplay = optimisticValue
-    ? typeof displayValue === 'function'
-      ? displayValue(optimisticValue)
-      : (displayValue ?? `${prefix ?? ''}${optimisticValue}`)
-    : null;
+  const resolvedDisplay =
+    optimisticValue !== ''
+      ? typeof displayValue === 'function'
+        ? displayValue(optimisticValue)
+        : (displayValue ?? `${prefix ?? ''}${optimisticValue}`)
+      : null;
 
   return (
     <div className={cn('flex h-8 items-center gap-1', className)}>
@@ -67,6 +68,11 @@ export function EditableText({
               onChange={e => {
                 setDraft(e.target.value);
               }}
+              onBlur={e => {
+                const related = e.relatedTarget as HTMLElement | null;
+                if (related?.closest('[data-editable-action]')) return;
+                handleCommit();
+              }}
               onKeyDown={e => {
                 if (e.key === 'Enter') handleCommit();
                 if (e.key === 'Escape') handleCancel();
@@ -76,10 +82,17 @@ export function EditableText({
               className={cn('h-8 text-sm', prefix && 'pl-6')}
             />
           </div>
-          <Button className="ml-2" size="icon-xs" variant="ghost" onClick={handleCommit} aria-label="Save">
+          <Button
+            data-editable-action
+            className="ml-2"
+            size="icon-xs"
+            variant="ghost"
+            onClick={handleCommit}
+            aria-label="Save"
+          >
             <Check />
           </Button>
-          <Button size="icon-xs" variant="ghost" onClick={handleCancel} aria-label="Cancel">
+          <Button data-editable-action size="icon-xs" variant="ghost" onClick={handleCancel} aria-label="Cancel">
             <X />
           </Button>
         </>
@@ -87,6 +100,7 @@ export function EditableText({
         <>
           <button
             type="button"
+            aria-label={`Edit ${optimisticValue || placeholder}`}
             className="hover:bg-muted flex h-8 cursor-pointer items-center gap-1 rounded-md px-2 transition-colors"
             onClick={() => {
               setDraft(optimisticValue);
