@@ -7,19 +7,21 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Spinner } from '../ui/spinner';
 
-type EditableTextProps = Omit<React.ComponentProps<'input'>, 'value' | 'action'> & {
+type EditableTextProps = Omit<React.ComponentProps<'input'>, 'value' | 'action' | 'onChange'> & {
   value: string;
-  action: (value: string) => void | Promise<void>;
   prefix?: string;
   displayValue?: (optimisticValue: string) => React.ReactNode;
+  onChange?: (value: string) => void;
+  action: (value: string) => void | Promise<void>;
 };
 
 export function EditableText({
   value,
-  action,
   placeholder = 'Click to edit...',
   prefix,
   displayValue: renderDisplay,
+  action,
+  onChange,
   className,
   ...inputProps
 }: EditableTextProps) {
@@ -60,7 +62,8 @@ export function EditableText({
               {...inputProps}
               value={draft}
               onChange={e => {
-                return setDraft(e.target.value);
+                setDraft(e.target.value);
+                onChange?.(e.target.value);
               }}
               onKeyDown={e => {
                 if (e.key === 'Enter') handleCommit();
