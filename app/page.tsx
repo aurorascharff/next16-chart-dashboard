@@ -12,6 +12,8 @@ import { getCategoryData, getMonthlyData } from '@/data/queries/sales';
 import type { FilterValues } from '@/types/filters';
 
 export default function Page({ searchParams }: PageProps<'/'>) {
+  const goalPromise = getRevenueGoal();
+
   return (
     <div className="group mx-auto flex max-w-7xl flex-col gap-6 p-6 md:p-10">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -32,7 +34,7 @@ export default function Page({ searchParams }: PageProps<'/'>) {
         </ViewTransition>
       </Suspense>
       <Suspense fallback={<RevenueGoalSkeleton />}>
-        <RevenueGoal />
+        <RevenueGoal goalPromise={goalPromise} />
       </Suspense>
       <div className="flex flex-col gap-6 group-has-data-pending:animate-pulse">
         <Suspense fallback={<SummaryCardsSkeleton />}>

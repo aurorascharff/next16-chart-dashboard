@@ -11,7 +11,7 @@ type EditableTextProps = Omit<React.ComponentProps<'input'>, 'value' | 'action'>
   value: string;
   action: (value: string) => void | Promise<void>;
   prefix?: string;
-  displayValue?: string;
+  displayValue?: (optimisticValue: string) => React.ReactNode;
 };
 
 export function EditableText({
@@ -19,7 +19,7 @@ export function EditableText({
   action,
   placeholder = 'Click to edit...',
   prefix,
-  displayValue: displayValueProp,
+  displayValue: renderDisplay,
   className,
   ...inputProps
 }: EditableTextProps) {
@@ -43,7 +43,7 @@ export function EditableText({
   }
 
   const displayValue = optimisticValue
-    ? (displayValueProp ?? `${prefix ?? ''}${optimisticValue}`)
+    ? (renderDisplay ? renderDisplay(optimisticValue) : `${prefix ?? ''}${optimisticValue}`)
     : null;
 
   return (
