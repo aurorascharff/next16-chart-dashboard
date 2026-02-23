@@ -22,7 +22,7 @@ export function RevenueGoal({ goalPromise }: Props) {
       <EditableText
         value={goalStr}
         action={saveRevenueGoal}
-        renderDisplay={value => {
+        displayValue={value => {
           const num = Number(value);
           if (Number.isNaN(num) || num === 0) return value;
           return formatCurrency(num);

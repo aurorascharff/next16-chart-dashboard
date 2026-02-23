@@ -10,7 +10,7 @@ import { Spinner } from '../ui/spinner';
 type EditableTextProps = Omit<React.ComponentProps<'input'>, 'value' | 'action' | 'onChange'> & {
   value: string;
   prefix?: string;
-  renderDisplay?: ((optimisticValue: string) => React.ReactNode) | React.ReactNode;
+  displayValue?: ((value: string) => React.ReactNode) | React.ReactNode;
   onChange?: (value: string) => void;
   action: (value: string) => void | Promise<void>;
 };
@@ -19,7 +19,7 @@ export function EditableText({
   value,
   placeholder = 'Click to edit...',
   prefix,
-  renderDisplay,
+  displayValue,
   action,
   onChange,
   className,
@@ -45,10 +45,10 @@ export function EditableText({
     setIsEditing(false);
   }
 
-  const displayValue = optimisticValue
-    ? typeof renderDisplay === 'function'
-      ? renderDisplay(optimisticValue)
-      : (renderDisplay ?? `${prefix ?? ''}${optimisticValue}`)
+  const resolvedDisplay = optimisticValue
+    ? typeof displayValue === 'function'
+      ? displayValue(optimisticValue)
+      : (displayValue ?? `${prefix ?? ''}${optimisticValue}`)
     : null;
 
   return (
@@ -93,8 +93,8 @@ export function EditableText({
               setIsEditing(true);
             }}
           >
-            <span className={cn('text-sm', !displayValue && 'text-muted-foreground italic')}>
-              {displayValue || placeholder}
+            <span className={cn('text-sm', !resolvedDisplay && 'text-muted-foreground italic')}>
+              {resolvedDisplay || placeholder}
             </span>
             <Pencil className="text-muted-foreground size-3 shrink-0" />
           </button>
