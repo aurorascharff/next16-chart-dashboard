@@ -10,7 +10,7 @@ import { Spinner } from '../ui/spinner';
 type EditableTextProps = Omit<React.ComponentProps<'input'>, 'value' | 'action' | 'onChange'> & {
   value: string;
   prefix?: string;
-  displayValue?: (optimisticValue: string) => React.ReactNode;
+  renderDisplay?: ((optimisticValue: string) => React.ReactNode) | React.ReactNode;
   onChange?: (value: string) => void;
   action: (value: string) => void | Promise<void>;
 };
@@ -19,7 +19,7 @@ export function EditableText({
   value,
   placeholder = 'Click to edit...',
   prefix,
-  displayValue: renderDisplay,
+  renderDisplay,
   action,
   onChange,
   className,
@@ -46,9 +46,9 @@ export function EditableText({
   }
 
   const displayValue = optimisticValue
-    ? renderDisplay
+    ? typeof renderDisplay === 'function'
       ? renderDisplay(optimisticValue)
-      : `${prefix ?? ''}${optimisticValue}`
+      : (renderDisplay ?? `${prefix ?? ''}${optimisticValue}`)
     : null;
 
   return (
