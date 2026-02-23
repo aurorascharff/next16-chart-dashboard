@@ -1,7 +1,7 @@
 'use client';
 
 import { useOptimistic, useTransition } from 'react';
-import { Select as ShadcnSelect, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select as BaseSelect, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Spinner } from '../ui/spinner';
 
 type Option = { name: string };
@@ -39,7 +39,7 @@ export function Select({
   return (
     <div className="flex flex-col gap-2">
       <label className="text-sm font-medium">{label}</label>
-      <ShadcnSelect value={optimisticValue ?? ''} onValueChange={handleChange} disabled={isDisabled}>
+      <BaseSelect value={optimisticValue ?? ''} onValueChange={handleChange} disabled={isDisabled}>
         <SelectTrigger className="w-full" disabled={isDisabled}>
           <SelectValue placeholder={placeholder} />
           {isLoading && <Spinner />}
@@ -53,7 +53,7 @@ export function Select({
             );
           })}
         </SelectContent>
-      </ShadcnSelect>
+      </BaseSelect>
     </div>
   );
 }
