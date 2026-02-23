@@ -3,7 +3,6 @@
 import { cookies } from 'next/headers';
 
 export async function saveRevenueGoal(value: string) {
-  return;
   const cookieStore = await cookies();
   const numValue = value.trim() ? Number(value) : null;
   if (numValue != null && !Number.isNaN(numValue)) {
