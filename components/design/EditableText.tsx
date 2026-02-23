@@ -33,6 +33,7 @@ export function EditableText({
   function handleCommit() {
     setIsEditing(false);
     if (draft === optimisticValue) return;
+    onChange?.(draft);
     startTransition(async () => {
       setOptimisticValue(draft);
       await action(draft);
@@ -65,7 +66,6 @@ export function EditableText({
               value={draft}
               onChange={e => {
                 setDraft(e.target.value);
-                onChange?.(e.target.value);
               }}
               onKeyDown={e => {
                 if (e.key === 'Enter') handleCommit();
