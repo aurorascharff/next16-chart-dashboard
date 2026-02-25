@@ -1,5 +1,4 @@
-import { Slide, SlideBadge, SlideNote, SlideSubtitle, SlideTitle } from '@/components/slides/Slide';
-import { SlideLink } from '@/components/slides/SlideLink';
+import { Slide, SlideBadge, SlideLink, SlideNote, SlideSubtitle, SlideTitle } from '@/components/slides/Slide';
 
 export const slides: React.ReactNode[] = [
   <Slide key="welcome">
@@ -15,9 +14,7 @@ export const slides: React.ReactNode[] = [
     <SlideTitle className="font-pixel">Try It</SlideTitle>
     <SlideSubtitle>Open the dashboard and explore the patterns in action.</SlideSubtitle>
     <div className="mt-4 flex items-center gap-4">
-      <SlideLink href="/" exit>
-        Open Dashboard →
-      </SlideLink>
+      <SlideLink href="/">Open Dashboard →</SlideLink>
       <SlideLink href="https://github.com/aurorascharff/next16-chart-dashboard" variant="ghost">
         GitHub
       </SlideLink>

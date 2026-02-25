@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import type { Route } from 'next';
 import { highlight } from 'sugar-high';
 import { cn } from '@/lib/utils';
 import { SlideDemoContent } from './SlideDemoContent';
@@ -107,5 +109,31 @@ export function SlideDemo({
         <SlideDemoContent>{children}</SlideDemoContent>
       </div>
     </div>
+  );
+}
+
+export function SlideLink({
+  href,
+  children,
+  className,
+  variant = 'primary',
+}: {
+  href: string;
+  children: React.ReactNode;
+  className?: string;
+  variant?: 'primary' | 'ghost';
+}) {
+  return (
+    <Link
+      href={href as Route}
+      className={cn(
+        'mt-2 inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-medium tracking-wide transition-opacity hover:opacity-80',
+        variant === 'primary' && 'bg-foreground text-background',
+        variant === 'ghost' && 'border-border text-muted-foreground border',
+        className,
+      )}
+    >
+      {children}
+    </Link>
   );
 }

@@ -211,7 +211,7 @@ A composable presentation system using URL-based routing, ViewTransitions, and s
 - `app/slides/slides.tsx` — Slide registry. Add/remove/reorder slides here.
 - `app/slides/layout.tsx` — Client layout with navigation logic and ViewTransition wrappers.
 - `components/slides/Slide.tsx` — All server-side slide primitives.
-- `components/slides/SlideLink.tsx` — Client component for links. `exit` prop triggers the deck exit ViewTransition.
+- `components/slides/SlideLink.tsx` — Server component for styled links inside slides.
 
 **Adding a slide:** Add a `<Slide>` element to the `slides` array in `app/slides/slides.tsx`. Compose with any combination of primitives: `SlideBadge`, `SlideTitle`, `SlideSubtitle`, `SlideCode`, `SlideList`, `SlideListItem`, `SlideNote`, `SlideDemo`. The layout and routing handle everything else automatically.
 
@@ -225,9 +225,9 @@ A composable presentation system using URL-based routing, ViewTransitions, and s
 </Slide>
 ```
 
-**Links:** Use `<SlideLink href="/slides/3">` inside slides to jump to a specific slide. Use `<SlideLink href="/" exit>` to leave the deck (triggers unveil animation). From outside the deck, link in with `<Link href="/slides/1">`.
+**Links:** Use `<SlideLink href="/slides/3">` inside slides to jump to a specific slide. Use `<SlideLink href="/">` to leave the deck. From outside the deck, link in with `<Link href="/slides/1">`. Links animate automatically via ViewTransition.
 
-**Animations:** Slide-to-slide transitions use directional sliding via `addTransitionType('slide-forward' | 'slide-back')`. The deck exit (via `SlideLink` with `exit`) uses a scale+fade unveil. All animation CSS is in `globals.css` using `::view-transition-old`/`::view-transition-new` selectors.
+**Animations:** Slide-to-slide transitions use the ViewTransition component — links animate automatically. The layout uses `addTransitionType('slide-forward' | 'slide-back')` only for keyboard/click navigation direction. All animation CSS is in `globals.css` using `::view-transition-old`/`::view-transition-new` selectors.
 
 **Code theme:** sugar-high uses `--sh-*` CSS variables defined in `globals.css` (light and dark variants). Code block colors use Tailwind theme tokens: `bg-code-bg`, `border-code-border`, `text-code-text`.
 

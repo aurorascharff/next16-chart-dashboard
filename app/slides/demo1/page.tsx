@@ -1,5 +1,5 @@
 import { Counter } from '@/app/slides/_components/Counter';
-import { SlideLink } from '@/components/slides/SlideLink';
+import { SlideLink } from '@/components/slides/Slide';
 
 export default function Demo1Page() {
   return (
@@ -12,9 +12,7 @@ export default function Demo1Page() {
         <p className="text-muted-foreground mb-4 text-center text-sm font-medium tracking-wider uppercase">Counter</p>
         <Counter />
       </div>
-      <SlideLink href="/slides/5" back>
-        ← Back to slides
-      </SlideLink>
+      <SlideLink href="/slides/5">← Back to slides</SlideLink>
     </div>
   );
 }
