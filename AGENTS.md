@@ -39,7 +39,7 @@ Next.js 16 App Router · React 19 · TypeScript strict · Tailwind CSS 4 · shad
 ```
 app/                    # File-based routing
 components/
-  ui/                   # shadcn/ui primitives (add: npx shadcn@latest add <n>)
+  ui/                   # shadcn/ui primitives (add: bunx --bun shadcn@latest add <n>)
   design/               # Design system — Action props pattern (see below)
   dashboard/            # Charts, filter wrappers, data visualizations
 data/
