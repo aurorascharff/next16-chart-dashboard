@@ -69,14 +69,14 @@ export function RevenueBarChart({ monthlyData, revenueGoal }: Props) {
             />
             <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} />
             {revenueGoal != null && (
-              <ReferenceLine y={revenueGoal} stroke="oklch(0.3 0.05 260)" strokeDasharray="8 4" strokeWidth={2} />
+              <ReferenceLine y={revenueGoal} stroke="var(--foreground)" strokeDasharray="8 4" strokeWidth={2} />
             )}
           </BarChart>
         </ChartContainer>
         {revenueGoal != null && (
           <div className="text-muted-foreground mt-3 flex items-center gap-2 text-xs">
             <svg width="16" height="2" aria-hidden="true">
-              <line x1="0" y1="1" x2="16" y2="1" stroke="oklch(0.3 0.05 260)" strokeWidth="2" strokeDasharray="4 2" />
+              <line x1="0" y1="1" x2="16" y2="1" stroke="var(--foreground)" strokeWidth="2" strokeDasharray="4 2" />
             </svg>
             Goal: {formatCurrency(revenueGoal)}
           </div>

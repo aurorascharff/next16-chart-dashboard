@@ -1,5 +1,6 @@
 import './globals.css';
 
+import { GeistPixelSquare } from 'geist/font/pixel';
 import { Github } from 'lucide-react';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Link from 'next/link';
@@ -29,12 +30,15 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   const userPromise = getCurrentUser();
   return (
     <html lang="en" className={geistSans.variable} suppressHydrationWarning>
-      <body className={`${geistMono.variable} antialiased`}>
+      <body className={`${geistMono.variable} ${GeistPixelSquare.variable} antialiased`}>
         <ThemeProvider>
           <AuthProvider value={userPromise}>
             <main>{children}</main>
           </AuthProvider>
-          <div className="fixed bottom-4 left-4 flex items-center gap-2">
+          <div
+            style={{ viewTransitionName: 'global-controls' }}
+            className="fixed bottom-4 left-4 z-60 flex items-center gap-2"
+          >
             <Link
               href="https://github.com/aurorascharff/next16-chart-dashboard"
               target="_blank"
