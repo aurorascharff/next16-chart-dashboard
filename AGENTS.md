@@ -7,10 +7,10 @@ Instructions for AI coding agents working on this Next.js 16 App Router project.
 ## Commands
 
 ```bash
-npm install
-npm run dev          # http://localhost:3000
-npm run build        # run before committing
-npm run lint         # run before committing
+bun install
+bun run dev          # http://localhost:3000
+bun run build        # run before committing
+bun run lint         # run before committing
 ```
 
 ## Stack
