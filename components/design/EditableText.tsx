@@ -11,7 +11,7 @@ type EditableTextProps = Omit<React.ComponentProps<'input'>, 'value' | 'action' 
   value: string;
   prefix?: string;
   displayValue?: ((value: string) => React.ReactNode) | React.ReactNode;
-  onChange?: (value: string) => void;
+  onChange?: (e: React.SyntheticEvent) => void;
   action: (value: string) => void | Promise<void>;
 };
 
@@ -30,10 +30,10 @@ export function EditableText({
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState(value);
 
-  function handleCommit() {
+  function handleCommit(e: React.SyntheticEvent) {
     setIsEditing(false);
     if (draft.trim() === optimisticValue) return;
-    onChange?.(draft);
+    onChange?.(e);
     startTransition(async () => {
       setOptimisticValue(draft);
       await action(draft);
@@ -71,10 +71,10 @@ export function EditableText({
               onBlur={e => {
                 const related = e.relatedTarget as HTMLElement | null;
                 if (related?.closest('[data-editable-action]')) return;
-                handleCommit();
+                handleCommit(e);
               }}
               onKeyDown={e => {
-                if (e.key === 'Enter') handleCommit();
+                if (e.key === 'Enter') handleCommit(e);
                 if (e.key === 'Escape') handleCancel();
               }}
               placeholder={placeholder}
@@ -87,7 +87,9 @@ export function EditableText({
             className="ml-2"
             size="icon-xs"
             variant="ghost"
-            onClick={handleCommit}
+            onClick={e => {
+              handleCommit(e);
+            }}
             aria-label="Save"
           >
             <Check />
