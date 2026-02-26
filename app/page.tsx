@@ -16,55 +16,54 @@ export default function Page({ searchParams }: PageProps<'/'>) {
 
   return (
     <div className="group mx-auto flex max-w-7xl flex-col gap-6 p-6 md:p-10">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Sales Dashboard</h1>
-          <Suspense fallback={<FilterPanelSkeleton />}>
-            <FilterPanel />
-          </Suspense>
-        </div>
-        <Suspense
-          fallback={
-            <ViewTransition enter="slide-down">
-              <UserGreetingSkeleton />
-            </ViewTransition>
-          }
-        >
-          <ViewTransition enter="slide-up">
-            <UserGreeting />
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Sales Dashboard</h1>
+        <Suspense fallback={<FilterPanelSkeleton />}>
+          <FilterPanel />
+        </Suspense>
+      </div>
+      <Suspense
+        fallback={
+          <ViewTransition enter="slide-down">
+            <UserGreetingSkeleton />
+          </ViewTransition>
+        }
+      >
+        <ViewTransition enter="slide-up">
+          <UserGreeting />
+        </ViewTransition>
+      </Suspense>
+      <Suspense fallback={<RevenueGoalSkeleton />}>
+        <RevenueGoal goalPromise={goalPromise} />
+      </Suspense>
+      <div className="flex flex-col gap-6 group-has-data-pending:animate-pulse">
+        <Suspense fallback={<SummaryCardsSkeleton />}>
+          <ViewTransition>
+            <SummaryCards searchParams={searchParams} />
           </ViewTransition>
         </Suspense>
-        <Suspense fallback={<RevenueGoalSkeleton />}>
-          <RevenueGoal goalPromise={goalPromise} />
-        </Suspense>
-        <div className="flex flex-col gap-6 group-has-data-pending:animate-pulse">
-          <Suspense fallback={<SummaryCardsSkeleton />}>
+        <h2 className="text-lg font-semibold tracking-tight">Monthly Trends</h2>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Suspense
+            fallback={
+              <>
+                <RevenueChartSkeleton />
+                <UnitsChartSkeleton />
+              </>
+            }
+          >
             <ViewTransition>
-              <SummaryCards searchParams={searchParams} />
-            </ViewTransition>
-          </Suspense>
-          <h2 className="text-lg font-semibold tracking-tight">Monthly Trends</h2>
-          <div className="grid gap-6 lg:grid-cols-2">
-            <Suspense
-              fallback={
-                <>
-                  <RevenueChartSkeleton />
-                  <UnitsChartSkeleton />
-                </>
-              }
-            >
-              <ViewTransition>
-                <RevenueChartWrapper searchParams={searchParams} />
-                <UnitsChartWrapper searchParams={searchParams} />
-              </ViewTransition>
-            </Suspense>
-          </div>
-          <h2 className="text-lg font-semibold tracking-tight">Breakdown</h2>
-          <Suspense fallback={<CategoryChartSkeleton />}>
-            <ViewTransition>
-              <CategoryChartWrapper searchParams={searchParams} />
+              <RevenueChartWrapper searchParams={searchParams} />
+              <UnitsChartWrapper searchParams={searchParams} />
             </ViewTransition>
           </Suspense>
         </div>
+        <h2 className="text-lg font-semibold tracking-tight">Breakdown</h2>
+        <Suspense fallback={<CategoryChartSkeleton />}>
+          <ViewTransition>
+            <CategoryChartWrapper searchParams={searchParams} />
+          </ViewTransition>
+        </Suspense>
       </div>
     </div>
   );
