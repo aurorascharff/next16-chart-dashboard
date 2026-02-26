@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { Suspense } from 'react';
 import { ViewTransition } from 'react';
 import { FilterPanel, FilterPanelSkeleton } from '@/components/FilterPanel';
@@ -11,21 +10,17 @@ import { UnitsAreaChart, UnitsChartSkeleton } from '@/components/charts/UnitsAre
 import { getRevenueGoal } from '@/data/queries/preferences';
 import { getCategoryData, getMonthlyData } from '@/data/queries/sales';
 import type { FilterValues } from '@/types/filters';
-import type { Route } from 'next';
 
 export default function Page({ searchParams }: PageProps<'/'>) {
   const goalPromise = getRevenueGoal();
 
   return (
     <>
-      <div className="fixed top-4 left-4 z-60 hidden lg:flex">
-        <Link
-          href={'/slides/1' as Route}
-          className="bg-foreground text-background inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium tracking-wide transition-opacity hover:opacity-80"
-        >
+      {/* <div className="fixed top-4 left-4 z-60 hidden lg:flex">
+        <Link href={'/slides/1' as Route} className={buttonVariants({ size: 'default', variant: 'default' })}>
           Start Slides →
         </Link>
-      </div>
+      </div> */}
       <div className="group mx-auto flex max-w-7xl flex-col gap-6 p-6 md:p-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Sales Dashboard</h1>

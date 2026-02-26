@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import type { Route } from 'next';
 import { highlight } from 'sugar-high';
+import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SlideDemoContent } from './SlideDemoContent';
+import type { Route } from 'next';
 
 export function Slide({
   children,
@@ -127,9 +128,8 @@ export function SlideLink({
     <Link
       href={href as Route}
       className={cn(
-        'mt-2 inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-medium tracking-wide transition-opacity hover:opacity-80',
-        variant === 'primary' && 'bg-foreground text-background',
-        variant === 'ghost' && 'border-border text-muted-foreground border',
+        buttonVariants({ size: 'lg', variant: variant === 'primary' ? 'default' : 'outline' }),
+        'mt-2 gap-2 tracking-wide',
         className,
       )}
     >
