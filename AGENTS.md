@@ -202,34 +202,27 @@ startTransition(() => {
 
 ## Slide Deck System
 
-A composable presentation system using URL-based routing, ViewTransitions, and sugar-high syntax highlighting.
-
-**Architecture:** Each slide maps to a URL (`/slides/1`, `/slides/2`, …). The layout handles navigation (keyboard, click, progress dots) and ViewTransition animations. Slides are composed from server component primitives.
+Uses the `nextjs-slides` package for composable presentations with URL-based routing, ViewTransitions, and sugar-high syntax highlighting.
 
 **Key files:**
 
-- `app/slides/slides.tsx` — Slide registry. Add/remove/reorder slides here.
-- `app/slides/layout.tsx` — Client layout with navigation logic and ViewTransition wrappers.
-- `components/slides/Slide.tsx` — All server-side slide primitives.
-- `components/slides/SlideLink.tsx` — Server component for styled links inside slides.
+- `app/slides/slides.tsx` — Slide registry. Import primitives from `nextjs-slides`.
+- `app/slides/layout.tsx` — Uses `<SlideDeck>` from the package.
+- `app/slides/[page]/page.tsx` — Uses `getSlide()` and `generateSlideParams()` from the package.
 
-**Adding a slide:** Add a `<Slide>` element to the `slides` array in `app/slides/slides.tsx`. Compose with any combination of primitives: `SlideBadge`, `SlideTitle`, `SlideSubtitle`, `SlideCode`, `SlideList`, `SlideListItem`, `SlideNote`, `SlideDemo`. The layout and routing handle everything else automatically.
+**Adding a slide:** Add a `<Slide>` element to the `slides` array. Available primitives from `nextjs-slides`:
 
-**Interactive components:** Wrap components in `<SlideDemo>` to embed interactive content. The `data-slide-interactive` attribute prevents click/keyboard navigation from interfering.
+- Layout: `Slide`, `SlideSplitLayout`
+- Typography: `SlideTitle`, `SlideSubtitle`, `SlideBadge`, `SlideHeaderBadge`, `SlideNote`
+- Content: `SlideCode`, `SlideDemo`, `SlideStatement`, `SlideStatementList`
+- Speakers: `SlideSpeaker`, `SlideSpeakerGrid`, `SlideSpeakerList`
+- Navigation: `SlideLink`
 
-```tsx
-<Slide>
-  <SlideDemo label="Live demo">
-    <MyComponent />
-  </SlideDemo>
-</Slide>
-```
+**Interactive components:** Wrap in `<SlideDemo>` — keyboard/click navigation won't interfere.
 
-**Links:** Use `<SlideLink href="/slides/3">` inside slides to jump to a specific slide. Use `<SlideLink href="/">` to leave the deck. From outside the deck, link in with `<Link href="/slides/1">`. Links animate automatically via ViewTransition.
+**Links:** Use `<SlideLink href="/slides/3">` to navigate. Links animate via ViewTransition.
 
-**Animations:** Slide-to-slide transitions use the ViewTransition component — links animate automatically. The layout uses `addTransitionType('slide-forward' | 'slide-back')` only for keyboard/click navigation direction. All animation CSS is in `globals.css` using `::view-transition-old`/`::view-transition-new` selectors.
-
-**Code theme:** sugar-high uses `--sh-*` CSS variables defined in `globals.css` (light and dark variants). Code block colors use Tailwind theme tokens: `bg-code-bg`, `border-code-border`, `text-code-text`.
+**Styles:** Import `nextjs-slides/styles.css` in globals.css. Code theme uses `--sh-*` CSS variables.
 
 ## Error Handling
 

@@ -1,10 +1,9 @@
-import { Counter } from '@/app/slides/_components/Counter';
 import {
   Slide,
   SlideBadge,
   SlideCode,
-  SlideHeaderBadge,
   SlideDemo,
+  SlideHeaderBadge,
   SlideLink,
   SlideNote,
   SlideSpeaker,
@@ -14,7 +13,8 @@ import {
   SlideStatementList,
   SlideSubtitle,
   SlideTitle,
-} from '@/components/slides/Slide';
+} from 'nextjs-slides';
+import { Counter } from '@/app/slides/_components/Counter';
 
 export const slides: React.ReactNode[] = [
   // 1. Title slide

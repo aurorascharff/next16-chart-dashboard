@@ -1,5 +1,5 @@
+import { SlideLink } from 'nextjs-slides';
 import { Counter } from '@/app/slides/_components/Counter';
-import { SlideLink } from '@/components/slides/Slide';
 
 export default function Demo1Page() {
   return (
