@@ -17,7 +17,7 @@ export default function Page({ searchParams }: PageProps<'/'>) {
 
   return (
     <>
-      <div className="fixed top-4 left-4 z-60">
+      <div className="fixed top-4 left-4 z-60 hidden lg:flex">
         <Link
           href={'/slides/1' as never}
           className="bg-foreground text-background inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium tracking-wide transition-opacity hover:opacity-80"
