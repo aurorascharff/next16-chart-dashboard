@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { addTransitionType, useEffect, useTransition, ViewTransition } from 'react';
 import { cn } from '@/lib/utils';
 import { slides } from './slides';
+import type { Route } from 'next';
 
 type SlidesLayoutProps = {
   children: React.ReactNode;
@@ -23,12 +24,22 @@ export default function SlidesLayout({ children }: SlidesLayoutProps) {
     return match ? Number(match[1]) - 1 : 0;
   })();
 
+  useEffect(() => {
+    if (!isSlideRoute) return;
+    if (current > 0) {
+      router.prefetch(`/slides/${current}` as Route);
+    }
+    if (current < total - 1) {
+      router.prefetch(`/slides/${current + 2}` as Route);
+    }
+  }, [current, isSlideRoute, router, total]);
+
   function goTo(index: number) {
     const clamped = Math.max(0, Math.min(index, total - 1));
     if (clamped === current) return;
     startTransition(() => {
       addTransitionType(clamped > current ? 'slide-forward' : 'slide-back');
-      router.push(`/slides/${clamped + 1}` as never);
+      router.push(`/slides/${clamped + 1}` as Route);
     });
   }
 

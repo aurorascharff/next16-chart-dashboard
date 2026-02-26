@@ -11,6 +11,7 @@ import { UnitsAreaChart, UnitsChartSkeleton } from '@/components/charts/UnitsAre
 import { getRevenueGoal } from '@/data/queries/preferences';
 import { getCategoryData, getMonthlyData } from '@/data/queries/sales';
 import type { FilterValues } from '@/types/filters';
+import type { Route } from 'next';
 
 export default function Page({ searchParams }: PageProps<'/'>) {
   const goalPromise = getRevenueGoal();
@@ -19,7 +20,7 @@ export default function Page({ searchParams }: PageProps<'/'>) {
     <>
       <div className="fixed top-4 left-4 z-60 hidden lg:flex">
         <Link
-          href={'/slides/1' as never}
+          href={'/slides/1' as Route}
           className="bg-foreground text-background inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium tracking-wide transition-opacity hover:opacity-80"
         >
           Start Slides →
