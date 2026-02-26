@@ -91,8 +91,7 @@ export default async function SlidePage({ params }) {
       <SlideStatementList>
         <SlideStatement title="→ / Space" description="Next slide" />
         <SlideStatement title="←" description="Previous slide" />
-        <SlideStatement title="Click right ⅔" description="Next slide" />
-        <SlideStatement title="Click left ⅓" description="Previous slide" />
+        <SlideStatement title="Progress dots" description="Track your position" />
       </SlideStatementList>
     }
   />,
