@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { addTransitionType, useEffect, useTransition, ViewTransition } from 'react';
+import { addTransitionType, useCallback, useEffect, useTransition, ViewTransition } from 'react';
 import { cn } from '@/lib/utils';
 import { slides } from './slides';
 import type { Route } from 'next';
@@ -34,22 +34,25 @@ export default function SlidesLayout({ children }: SlidesLayoutProps) {
     }
   }, [current, isSlideRoute, router, total]);
 
-  function goTo(index: number) {
-    const clamped = Math.max(0, Math.min(index, total - 1));
-    if (clamped === current) return;
-    startTransition(() => {
-      addTransitionType(clamped > current ? 'slide-forward' : 'slide-back');
-      router.push(`/slides/${clamped + 1}` as Route);
-    });
-  }
+  const goTo = useCallback(
+    (index: number) => {
+      const clamped = Math.max(0, Math.min(index, total - 1));
+      if (clamped === current) return;
+      startTransition(() => {
+        addTransitionType(clamped > current ? 'slide-forward' : 'slide-back');
+        router.push(`/slides/${clamped + 1}` as Route);
+      });
+    },
+    [current, router, startTransition, total],
+  );
 
-  function next() {
+  const next = useCallback(() => {
     goTo(current + 1);
-  }
+  }, [current, goTo]);
 
-  function prev() {
+  const prev = useCallback(() => {
     goTo(current - 1);
-  }
+  }, [current, goTo]);
 
   useEffect(() => {
     if (!isSlideRoute) return;
@@ -77,7 +80,7 @@ export default function SlidesLayout({ children }: SlidesLayoutProps) {
     return () => {
       window.removeEventListener('keydown', onKeyDown);
     };
-  });
+  }, [isSlideRoute, next, prev]);
 
   useEffect(() => {
     const prevOverflow = document.body.style.overflow;
@@ -87,22 +90,25 @@ export default function SlidesLayout({ children }: SlidesLayoutProps) {
     };
   }, []);
 
-  function handleClick(e: React.MouseEvent) {
-    if (!isSlideRoute) return;
-    if (
-      (e.target as HTMLElement).closest(
-        'a, button, input, select, textarea, label, [data-slide-interactive], [contenteditable]',
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (!isSlideRoute) return;
+      if (
+        (e.target as HTMLElement).closest(
+          'a, button, input, select, textarea, label, [data-slide-interactive], [contenteditable]',
+        )
       )
-    )
-      return;
-    const x = e.clientX;
-    const width = window.innerWidth;
-    if (x < width / 3) {
-      prev();
-    } else {
-      next();
-    }
-  }
+        return;
+      const x = e.clientX;
+      const width = window.innerWidth;
+      if (x < width / 3) {
+        prev();
+      } else {
+        next();
+      }
+    },
+    [isSlideRoute, next, prev],
+  );
 
   return (
     <ViewTransition exit="deck-unveil">
