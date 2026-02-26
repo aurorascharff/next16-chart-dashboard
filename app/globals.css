@@ -1,9 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
-@import 'nextjs-slides/styles.css';
-
-@source "../node_modules/nextjs-slides/dist";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -91,15 +88,6 @@
   --code-bg: #fafafa;
   --code-border: #eaeaea;
   --code-text: #171717;
-  --sh-class: #7200c4;
-  --sh-identifier: #171717;
-  --sh-keyword: #b32c62;
-  --sh-string: #397c3b;
-  --sh-property: #005ee9;
-  --sh-entity: #005ee9;
-  --sh-jsxliterals: #171717;
-  --sh-sign: #666;
-  --sh-comment: #666666;
 }
 
 .dark {
@@ -138,15 +126,6 @@
   --code-bg: #0a0a0a;
   --code-border: #262626;
   --code-text: #ededed;
-  --sh-class: #b675f1;
-  --sh-identifier: #ededed;
-  --sh-keyword: #f05b8d;
-  --sh-string: #58c760;
-  --sh-property: #62a6ff;
-  --sh-entity: #62a6ff;
-  --sh-jsxliterals: #ededed;
-  --sh-sign: #a1a1a1;
-  --sh-comment: #a1a1a1;
 }
 
 @layer base {

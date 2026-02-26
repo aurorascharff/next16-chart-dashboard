@@ -38,16 +38,9 @@ Next.js 16 App Router · React 19 · TypeScript strict · Tailwind CSS 4 · shad
 
 ```
 app/                    # File-based routing
-  slides/               # Slide deck system
-    _components/        # Slide-local components
-    [page]/page.tsx     # Dynamic route per slide
-    layout.tsx          # Client layout — navigation, ViewTransition
-    slides.tsx          # Slide registry
-    page.tsx            # Redirects /slides → /slides/1
 components/
   ui/                   # shadcn/ui primitives (add: bunx --bun shadcn@latest add <n>)
   design/               # Design system — Action props pattern (see below)
-  slides/               # Slide primitives (Slide.tsx, SlideLink.tsx, SlideDemoContent.tsx)
   charts/               # Chart components (RevenueBarChart, UnitsAreaChart, CategoryPieChart)
 data/
   queries/              # Server-side data fetching, wrapped with cache()
@@ -199,30 +192,6 @@ startTransition(() => {
   router.push(nextUrl);
 });
 ```
-
-## Slide Deck System
-
-Uses the `nextjs-slides` package for composable presentations with URL-based routing, ViewTransitions, and sugar-high syntax highlighting.
-
-**Key files:**
-
-- `app/slides/slides.tsx` — Slide registry. Import primitives from `nextjs-slides`.
-- `app/slides/layout.tsx` — Uses `<SlideDeck>` from the package.
-- `app/slides/[page]/page.tsx` — Uses `getSlide()` and `generateSlideParams()` from the package.
-
-**Adding a slide:** Add a `<Slide>` element to the `slides` array. Available primitives from `nextjs-slides`:
-
-- Layout: `Slide`, `SlideSplitLayout`
-- Typography: `SlideTitle`, `SlideSubtitle`, `SlideBadge`, `SlideHeaderBadge`, `SlideNote`
-- Content: `SlideCode`, `SlideDemo`, `SlideStatement`, `SlideStatementList`
-- Speakers: `SlideSpeaker`, `SlideSpeakerGrid`, `SlideSpeakerList`
-- Navigation: `SlideLink`
-
-**Interactive components:** Wrap in `<SlideDemo>` — keyboard/click navigation won't interfere.
-
-**Links:** Use `<SlideLink href="/slides/3">` to navigate. Links animate via ViewTransition.
-
-**Styles:** Import `nextjs-slides/styles.css` in globals.css. Code theme uses `--sh-*` CSS variables.
 
 ## Error Handling
 

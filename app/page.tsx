@@ -15,13 +15,7 @@ export default function Page({ searchParams }: PageProps<'/'>) {
   const goalPromise = getRevenueGoal();
 
   return (
-    <>
-      {/* <div className="fixed top-4 left-4 z-60 hidden lg:flex">
-        <Link href={'/slides/1' as Route} className={buttonVariants({ size: 'default', variant: 'default' })}>
-          Start Slides →
-        </Link>
-      </div> */}
-      <div className="group mx-auto flex max-w-7xl flex-col gap-6 p-6 md:p-10">
+    <div className="group mx-auto flex max-w-7xl flex-col gap-6 p-6 md:p-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Sales Dashboard</h1>
           <Suspense fallback={<FilterPanelSkeleton />}>
@@ -72,7 +66,7 @@ export default function Page({ searchParams }: PageProps<'/'>) {
           </Suspense>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
