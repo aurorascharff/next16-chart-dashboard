@@ -6,33 +6,17 @@ import { cn } from '@/lib/utils';
 import { slides } from './slides';
 import type { Route } from 'next';
 
-type SlidesLayoutProps = {
-  children: React.ReactNode;
-};
-
-export default function SlidesLayout({ children }: SlidesLayoutProps) {
+export default function SlidesLayout({ children }: LayoutProps<'/slides'>) {
   const router = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
 
   const total = slides.length;
-
   const isSlideRoute = /\/slides\/\d+$/.test(pathname);
-
   const current = (() => {
     const match = pathname.match(/\/slides\/(\d+)/);
     return match ? Number(match[1]) - 1 : 0;
   })();
-
-  useEffect(() => {
-    if (!isSlideRoute) return;
-    if (current > 0) {
-      router.prefetch(`/slides/${current}` as Route);
-    }
-    if (current < total - 1) {
-      router.prefetch(`/slides/${current + 2}` as Route);
-    }
-  }, [current, isSlideRoute, router, total]);
 
   const goTo = useCallback(
     (index: number) => {
@@ -46,13 +30,11 @@ export default function SlidesLayout({ children }: SlidesLayoutProps) {
     [current, router, startTransition, total],
   );
 
-  const next = useCallback(() => {
-    goTo(current + 1);
-  }, [current, goTo]);
-
-  const prev = useCallback(() => {
-    goTo(current - 1);
-  }, [current, goTo]);
+  useEffect(() => {
+    if (!isSlideRoute) return;
+    if (current > 0) router.prefetch(`/slides/${current}` as Route);
+    if (current < total - 1) router.prefetch(`/slides/${current + 2}` as Route);
+  }, [current, isSlideRoute, router, total]);
 
   useEffect(() => {
     if (!isSlideRoute) return;
@@ -64,63 +46,34 @@ export default function SlidesLayout({ children }: SlidesLayoutProps) {
       ) {
         return;
       }
-      switch (e.key) {
-        case 'ArrowRight':
-        case ' ':
-          e.preventDefault();
-          next();
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          prev();
-          break;
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        goTo(current + 1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goTo(current - 1);
       }
     }
     window.addEventListener('keydown', onKeyDown);
     return () => {
-      window.removeEventListener('keydown', onKeyDown);
+      return window.removeEventListener('keydown', onKeyDown);
     };
-  }, [isSlideRoute, next, prev]);
+  }, [current, goTo, isSlideRoute]);
 
   useEffect(() => {
-    const prevOverflow = document.body.style.overflow;
+    const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = prevOverflow;
+      document.body.style.overflow = prev;
     };
   }, []);
-
-  const handleClick = useCallback(
-    (e: React.MouseEvent) => {
-      if (!isSlideRoute) return;
-      if (
-        (e.target as HTMLElement).closest(
-          'a, button, input, select, textarea, label, [data-slide-interactive], [contenteditable]',
-        )
-      )
-        return;
-      const x = e.clientX;
-      const width = window.innerWidth;
-      if (x < width / 3) {
-        prev();
-      } else {
-        next();
-      }
-    },
-    [isSlideRoute, next, prev],
-  );
 
   return (
     <ViewTransition exit="deck-unveil">
       <div
         id="slide-deck"
-        className={cn(
-          'bg-background text-foreground fixed inset-0 z-50 overflow-hidden font-sans select-none',
-          isSlideRoute && 'cursor-pointer',
-        )}
+        className="bg-background text-foreground fixed inset-0 z-50 overflow-hidden font-sans select-none"
         data-pending={isPending ? '' : undefined}
-        onClick={handleClick}
-        role="presentation"
       >
         <ViewTransition
           key={pathname}
@@ -158,12 +111,9 @@ export default function SlidesLayout({ children }: SlidesLayoutProps) {
         )}
 
         {isSlideRoute && (
-          <>
-            <div className="text-muted-foreground/50 fixed right-8 bottom-8 z-50 font-mono text-xs">
-              {current + 1} / {total}
-            </div>
-            <div className="text-muted-foreground/30 fixed bottom-8 left-8 z-50 font-mono text-[10px]">← → space</div>
-          </>
+          <div className="text-muted-foreground/50 fixed right-8 bottom-8 z-50 font-mono text-xs">
+            {current + 1} / {total}
+          </div>
         )}
       </div>
     </ViewTransition>
