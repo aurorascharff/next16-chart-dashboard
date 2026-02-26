@@ -93,7 +93,7 @@ export default function SlidesLayout({ children }: LayoutProps<'/slides'>) {
 
         {isSlideRoute && (
           <div
-            className="fixed bottom-8 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2"
+            className="fixed bottom-8 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1.5"
             aria-label="Slide progress"
           >
             {Array.from({ length: total }).map((_, i) => {
@@ -101,8 +101,8 @@ export default function SlidesLayout({ children }: LayoutProps<'/slides'>) {
                 <div
                   key={i}
                   className={cn(
-                    'h-1.5 rounded-full transition-all duration-300',
-                    i === current ? 'bg-foreground w-6' : 'bg-foreground/25 w-1.5',
+                    'h-1 transition-all duration-300',
+                    i === current ? 'bg-foreground w-6' : 'bg-foreground/20 w-1',
                   )}
                 />
               );
@@ -111,7 +111,7 @@ export default function SlidesLayout({ children }: LayoutProps<'/slides'>) {
         )}
 
         {isSlideRoute && (
-          <div className="text-muted-foreground/50 fixed right-8 bottom-8 z-50 font-mono text-xs">
+          <div className="text-foreground/30 fixed right-8 bottom-8 z-50 font-mono text-xs tracking-wider">
             {current + 1} / {total}
           </div>
         )}
