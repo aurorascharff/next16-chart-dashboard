@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { cacheLife } from 'next/cache';
 import { cache } from 'react';
 import { checkAuth } from '@/data/queries/user';
 import { MOCK_SALES, type MockSaleRecord } from '@/data/sales-data';
@@ -41,8 +42,8 @@ export const getMonthlyData = cache(async (filters: SalesFilters) => {
 });
 
 async function getMonthlyDataCached(filters: SalesFilters) {
-  // 'use cache: remote';
-  // cacheLife('hours');
+  'use cache: remote';
+  cacheLife('hours');
 
   await slow(3000);
 
@@ -70,8 +71,8 @@ export const getCategoryData = cache(async (filters: SalesFilters) => {
 });
 
 async function getCategoryDataCached(filters: SalesFilters) {
-  // 'use cache: remote';
-  // cacheLife('hours');
+  'use cache: remote';
+  cacheLife('hours');
 
   await slow(2000);
 
@@ -96,8 +97,8 @@ export const getSummaryData = cache(async (filters: SalesFilters) => {
 });
 
 async function getSummaryDataCached(filters: SalesFilters) {
-  // 'use cache: remote';
-  // cacheLife('hours');
+  'use cache: remote';
+  cacheLife('hours');
 
   await slow(2000);
 
@@ -116,8 +117,8 @@ async function getSummaryDataCached(filters: SalesFilters) {
 }
 
 export const getCategories = cache(async () => {
-  // 'use cache: remote';
-  // cacheLife('hours');
+  'use cache: remote';
+  cacheLife('hours');
 
   await slow();
 
@@ -129,8 +130,8 @@ export const getCategories = cache(async () => {
 });
 
 export const getSubcategories = cache(async (category: string) => {
-  // 'use cache: remote';
-  // cacheLife('hours');
+  'use cache: remote';
+  cacheLife('hours');
 
   await slow();
 
@@ -149,8 +150,8 @@ export const getSubcategories = cache(async (category: string) => {
 });
 
 export const getRegions = cache(async () => {
-  // 'use cache: remote';
-  // cacheLife('hours');
+  'use cache: remote';
+  cacheLife('hours');
 
   await slow();
 
@@ -162,8 +163,8 @@ export const getRegions = cache(async () => {
 });
 
 export const getCountries = cache(async (region: string) => {
-  // 'use cache: remote';
-  // cacheLife('hours');
+  'use cache: remote';
+  cacheLife('hours');
 
   await slow();
 
@@ -182,8 +183,8 @@ export const getCountries = cache(async (region: string) => {
 });
 
 export const getCities = cache(async (region: string, country?: string | null) => {
-  // 'use cache: remote';
-  // cacheLife('hours');
+  'use cache: remote';
+  cacheLife('hours');
 
   await slow();
 
