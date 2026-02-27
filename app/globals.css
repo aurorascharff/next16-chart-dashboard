@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
+@import 'nextjs-slides/styles.css';
+
+@source "../node_modules/nextjs-slides/dist";
 
 @custom-variant dark (&:is(.dark *));
 
