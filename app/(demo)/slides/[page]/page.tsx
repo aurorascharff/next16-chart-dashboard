@@ -1,5 +1,5 @@
 import { generateSlideParams, getSlide } from 'nextjs-slides';
-import { slides } from '@/app/slides/slides';
+import { slides } from '@/app/(demo)/slides/slides';
 
 export const generateStaticParams = () => {
   return generateSlideParams(slides);
