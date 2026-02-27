@@ -184,3 +184,7 @@
     fade-out 150ms ease-in both,
     slide-down 150ms ease-in both;
 }
+
+::view-transition-group(anything) {
+  z-index: 100;
+}
