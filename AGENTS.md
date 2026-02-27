@@ -11,6 +11,8 @@ bun install
 bun run dev          # http://localhost:3000
 bun run build        # run before committing
 bun run lint         # run before committing
+bun run format:check # run before committing
+bun run format       # fix formatting
 ```
 
 ## Stack
@@ -118,7 +120,9 @@ Replace manual `isLoading`/`isError` state with React 19 primitives:
 ```tsx
 const [isPending, startTransition] = useTransition();
 function applyFilterAction(value: string) {
-  startTransition(() => { setFilter(value); });
+  startTransition(() => {
+    setFilter(value);
+  });
 }
 ```
 
@@ -180,7 +184,11 @@ Wraps the browser View Transition API; activates on React transition updates. Us
 
 ```tsx
 <ViewTransition key="results">
-  {items.map(item => <ViewTransition key={item.id}><Item /></ViewTransition>)}
+  {items.map(item => (
+    <ViewTransition key={item.id}>
+      <Item />
+    </ViewTransition>
+  ))}
 </ViewTransition>
 ```
 
