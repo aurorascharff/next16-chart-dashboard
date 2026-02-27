@@ -185,6 +185,8 @@
     slide-down 150ms ease-in both;
 }
 
-::view-transition-group(anything) {
+::view-transition-group(sheet-content),
+::view-transition-group(sheet-overlay),
+::view-transition-group(theme-toggle) {
   z-index: 100;
 }

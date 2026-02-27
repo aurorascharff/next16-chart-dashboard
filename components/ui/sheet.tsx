@@ -26,6 +26,7 @@ function SheetOverlay({ className, ...props }: SheetPrimitive.Backdrop.Props) {
   return (
     <SheetPrimitive.Backdrop
       data-slot="sheet-overlay"
+      style={{ viewTransitionName: 'sheet-overlay' }}
       className={cn(
         'data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 fixed inset-0 z-50 bg-black/10 duration-100 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-backdrop-filter:backdrop-blur-xs',
         className,
@@ -49,7 +50,7 @@ function SheetContent({
     <SheetPortal>
       <SheetOverlay />
       <SheetPrimitive.Popup
-        style={{ viewTransitionName: 'anything' }}
+        style={{ viewTransitionName: 'sheet-content' }}
         data-slot="sheet-content"
         data-side={side}
         className={cn(
