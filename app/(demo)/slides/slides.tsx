@@ -17,7 +17,7 @@ export const slides: React.ReactNode[] = [
   <Slide key="title">
     <SlideBadge>Next.js 16 · React 19</SlideBadge>
     <SlideTitle>Building Performant Dynamic Apps in Next.js with Cache Components</SlideTitle>
-    <SlideSpeaker name="Speaker Name" title="Title" avatar="/avatar.JPG" />
+    <SlideSpeaker name="Speaker Name" title="Title"/>
   </Slide>,
 
   // 2 — The problem

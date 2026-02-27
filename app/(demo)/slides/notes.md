@@ -43,3 +43,39 @@ Not everything belongs on the server. Cascading filter options — where each dr
 ---
 
 Starting from the slow version. We'll solve each problem one at a time.
+
+---
+
+Open the dashboard. Show the slow version — everything blocks on the slowest query. Point out how filters are not interactive until all charts finish loading. Show the network tab: all requests fire, nothing streams.
+
+---
+
+Add Suspense boundaries around each chart and summary cards. Show how they now stream independently — fast data appears first. Filters are accessible immediately. Point out: no skeleton re-flash on re-filter because Suspense preserves revealed content.
+
+---
+
+Add useOptimistic to filters. Show instant filter feedback — the select updates before the server responds. Show the data-pending pattern: set data-pending on the filter panel, use group-has-data-pending:animate-pulse on the chart area. One attribute drives the whole pending UI.
+
+---
+
+Show the action props pattern in design/Select. The component owns useOptimistic + useTransition internally. Consumer just passes value and action. Show the EditableText component with displayValue render prop for formatCurrency — optimistic formatting.
+
+---
+
+Add 'use cache: remote' to queries. Show checkAuth() outside the cache boundary, data inside. Reload — first load is slow, second is instant. Hard refresh to purge cache and show the slow version again. Explain cacheLife('hours').
+
+---
+
+Show SWR cascading filters. Open the filter panel — regions load client-side. Select a region, countries fetch. Select a country, cities fetch. Show null key skipping in the code. Show the thin API route handlers that wrap the same server queries.
+
+---
+
+Open the network tab. Walk through what happens on a filter change: optimistic UI updates, router.replace triggers server render, RSC payload streams in chunks per Suspense boundary, SWR fetches new filter options from API routes. Show server function calls, API calls, and cached query hits all visible.
+
+---
+
+Show use() pattern. Server wrapper starts the fetch, passes promise to client chart component. Client unwraps with use(). Show the AuthProvider pattern — user promise started once in root layout, passed via context, unwrapped with use() in any client component. No duplicate fetches, no prop drilling.
+
+---
+
+Wrap up. Recap what we solved: streaming, instant filters, caching with auth, no skeleton re-flash. Show the Performance tab or cacheComponents static shell if time allows.
